@@ -7,6 +7,26 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [0.2.0] — 2026-07-20
+
+### Adicionado
+
+- **ProfileHeader** — avatar com iniciais (fallback se sem imagem), nome e bio
+- **LinkButton** — botão de link com ícone SVG inline, hover state (sky-400), altura 48px (acessível)
+- **Página Linktree dinâmica** — consome `links.config.ts` e renderiza ProfileHeader + LinkButton
+- **`config/shortener-static.config.ts`** — mapa estático `short_code → URL` para fallback do encurtador
+
+### Alterado
+
+- `config/links.config.ts` populado com 4 links (Instagram, WhatsApp, Portfólio, + placeholder extra)
+- `app/page.tsx` refatorado para usar `@/components/ProfileHeader` e `@/components/LinkButton`
+- `scripts/validate.mjs` atualizado para testar Etapa 2 (link buttons, ausência de skeletons)
+
+### Validação
+
+- Build limpo com TypeScript check
+- Playwright: 4 link buttons renderizados em mobile e desktop, h1 ok, dark mode ok, 0 skeletons
+
 ## [0.1.0] — 2026-07-20
 
 ### Adicionado
@@ -36,7 +56,6 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Pendente para próximas versões
 
 - [ ] Deploy inicial na Vercel (manual)
-- [ ] Página Linktree estática com links reais (Etapa 2)
 - [ ] Rota `/[shortcode]` com redirecionamento (Etapa 3)
 - [ ] Projeto Supabase + schemas SQL (Etapa 4)
 - [ ] Analytics real com Supabase (Etapa 5)

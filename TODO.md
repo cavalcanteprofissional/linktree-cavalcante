@@ -69,14 +69,24 @@ O MCP GitHub estará disponível em **qualquer projeto**. Ao reiniciar, vou exec
 
 ---
 
-## Etapa 2: Página Linktree Estática (🏁 PRÓXIMA)
-- [ ] Popular `config/links.config.ts` com links reais do `CONTENT.md`
-- [ ] Criar arquivo `config/shortener-static.config.ts` — mapa estático `short_code → URL`
-- [ ] Implementar `components/ProfileHeader.tsx` (avatar + bio + headline)
-- [ ] Implementar `components/LinkButton.tsx` (botão de link com ícone + label)
-- [ ] Atualizar `app/page.tsx` para consumir `links.config.ts` e renderizar ProfileHeader + LinkButton
-- [ ] Layout responsivo: mobile (375px) + tablet (768px) + desktop (1280px)
-- [ ] Validação Playwright: screenshots + DOM
+## Etapa 2: Página Linktree Estática ✅
+
+- [x] Popular `config/links.config.ts` com links (placeholders: Instagram, WhatsApp, Portfólio, + extra)
+- [x] Criar `config/shortener-static.config.ts` — mapa estático `short_code → URL`
+- [x] Implementar `components/ProfileHeader.tsx` (avatar com iniciais + bio + nome)
+- [x] Implementar `components/LinkButton.tsx` (botão de link com SVG inline + label, hover sky-400)
+- [x] Refatorar `app/page.tsx` para consumir ProfileHeader + LinkButton + `links.config.ts`
+- [x] Layout responsivo: mobile-first (max-w-md) + centralizado
+- [x] Validação Playwright: 4 link buttons renderizados, 0 skeletons, h1 + bio ok
+
+---
+
+## Etapa 3: Rota `/[shortcode]` com Fallback Estático (🏁 PRÓXIMA)
+- [ ] Criar `app/[shortcode]/route.ts` — rota dinâmica de redirect
+- [ ] Implementar lógica de resolução em `lib/shortener.ts` (fallback `staticShortLinks`)
+- [ ] Adicionar analytics fire-and-forget (`POST /api/analytics`)
+- [ ] Criar `app/api/analytics/route.ts` — endpoint no-op quando sem Supabase
+- [ ] Testar redirect real via Playwright (status 302) + fallback 404
 
 ---
 

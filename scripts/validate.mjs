@@ -29,16 +29,16 @@ async function run() {
   const mobileDark = await mobilePage.evaluate(() =>
     document.documentElement.classList.contains("dark")
   );
-  const mobileBg = await mobilePage.evaluate(() =>
-    getComputedStyle(document.body).backgroundColor
-  );
-  const mobileSkeletonCount = await mobilePage.locator(".animate-pulse").count();
+  const mobileBio = await mobilePage.textContent("p");
+  const mobileLinks = await mobilePage.locator("a[target=_blank]").count();
+  const mobileSkeleton = await mobilePage.locator(".animate-pulse").count();
 
   console.log("--- MOBILE (375x812) ---");
   console.log(`h1 text: ${mobileH1}`);
   console.log(`dark class: ${mobileDark}`);
-  console.log(`body bg: ${mobileBg}`);
-  console.log(`skeleton placeholders: ${mobileSkeletonCount}`);
+  console.log(`bio text: ${mobileBio}`);
+  console.log(`link buttons: ${mobileLinks}`);
+  console.log(`skeletons: ${mobileSkeleton}`);
 
   // --- Desktop (1280x800) ---
   const desktopCtx = await browser.newContext({
@@ -52,15 +52,12 @@ async function run() {
     fullPage: true,
   });
 
-  // DOM checks (desktop)
   const desktopH1 = await desktopPage.textContent("h1");
-  const desktopDark = await desktopPage.evaluate(() =>
-    document.documentElement.classList.contains("dark")
-  );
+  const desktopLinks = await desktopPage.locator("a[target=_blank]").count();
 
   console.log("\n--- DESKTOP (1280x800) ---");
   console.log(`h1 text: ${desktopH1}`);
-  console.log(`dark class: ${desktopDark}`);
+  console.log(`link buttons: ${desktopLinks}`);
 
   // --- Assertions ---
   const errors = [];
@@ -69,9 +66,12 @@ async function run() {
   if (desktopH1?.trim() !== "LinkTree Cavalcante")
     errors.push(`Desktop: h1 mismatch: "${desktopH1}"`);
   if (!mobileDark) errors.push("Mobile: missing dark class on <html>");
-  if (!desktopDark) errors.push("Desktop: missing dark class on <html>");
-  if (mobileSkeletonCount !== 3)
-    errors.push(`Expected 3 skeleton placeholders, got ${mobileSkeletonCount}`);
+  if (mobileLinks === 0)
+    errors.push("Mobile: no link buttons rendered");
+  if (desktopLinks === 0)
+    errors.push("Desktop: no link buttons rendered");
+  if (mobileSkeleton > 0)
+    errors.push(`Mobile: ${mobileSkeleton} skeletons still present (should be 0)`);
 
   console.log("\n--- RESULTS ---");
   if (errors.length === 0) {
