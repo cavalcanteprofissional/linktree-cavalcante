@@ -53,6 +53,26 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `.env.example` com variáveis para Supabase, Instagram e domínio do encurtador
 - `CONTENT.md` para separação entre instruções técnicas (SKILL.md) e conteúdo real
 
+## [0.4.0] — 2026-07-20
+
+### Adicionado
+
+- **Projeto Supabase `linktree-cavalcante`** criado (ref: `ezcrzdbfdxchqpckrfan`)
+- **SQLs aplicados**: `schema.sql` → `rls.sql` → `seed.sql` (4 tabelas + RLS + seed data)
+- **`.env.local`** com `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY`
+- Config global MCP atualizado com novo `project_ref`
+
+### Analytics — Real vs Fallback
+
+- Com `.env.local`: `/api/analytics` → `source: "supabase"`, registra em `link_clicks` ✅
+- Sem `.env.local`: `/api/analytics` → `source: "noop"`, sem depender de BD ✅
+- `lib/shortener.ts` com Supabase: busca em DB → fallback `staticShortLinks`
+
+### Validação
+
+- Redirect `/portfolio` registrou clique real no Supabase
+- `link_clicks` populada com 2 entradas do teste + 3 do seed
+
 ## [0.3.0] — 2026-07-20
 
 ### Adicionado
@@ -75,9 +95,6 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Pendente para próximas versões
 
 - [ ] Deploy inicial na Vercel (manual)
-- [ ] Projeto Supabase + schemas SQL (Etapa 4)
-- [ ] Projeto Supabase + schemas SQL (Etapa 4)
-- [ ] Analytics real com Supabase (Etapa 5)
 - [ ] Feed do Instagram com fallback mockado (Etapa 6)
 - [ ] Integração Meta Graph API (Etapa 7)
 - [ ] Pipeline Python de agregação (Etapa 10)

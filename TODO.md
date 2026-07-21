@@ -91,11 +91,31 @@ O MCP GitHub estará disponível em **qualquer projeto**. Ao reiniciar, vou exec
 
 ---
 
-## Etapa 4: Criar Projeto Supabase + SQL (🏁 PRÓXIMA)
-- [ ] Criar conta/projeto no Supabase (free tier)
-- [ ] Rodar `schema.sql` → `rls.sql` → `seed.sql` no SQL editor
-- [ ] Configurar `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` no `.env.local`
-- [ ] Validar que `lib/supabase.ts` conecta e `hasSupabase` fica true
+## Etapa 4: Criar Projeto Supabase + SQL ✅
+
+- [x] Criado projeto Supabase free tier `linktree-cavalcante` (ref: `ezcrzdbfdxchqpckrfan`)
+- [x] Rodados `schema.sql` → `rls.sql` → `seed.sql` via SQL Editor
+- [x] `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` configurados no `.env.local`
+- [x] Config global do MCP atualizada com novo project_ref
+- [x] Verificado: `hasSupabase = true`, tabelas com seed data
+
+---
+
+## Etapa 5: Conectar Analytics Real + Validar Fluxo Completo ✅
+
+- [x] Testado redirect `/portfolio` + analytics registrado em `link_clicks` (2 cliques no Supabase real)
+- [x] `/api/analytics` retorna `source: "supabase"` com .env.local ativo
+- [x] `/api/analytics` retorna `source: "noop"` sem .env.local (fallback confirmado)
+- [x] Fallback do shortener: sem Supabase → `staticShortLinks`, com Supabase → DB
+
+---
+
+## Etapa 6: Feed Instagram com Fallback Mockado (🏁 PRÓXIMA)
+- [ ] Popular `config/instagram-mock.config.ts` com posts mockados (placeholders)
+- [ ] Implementar `lib/instagram.ts` — chamada à Meta Graph API + fallback mock
+- [ ] Implementar `components/InstagramFeed.tsx` — grid 3 colunas com posts
+- [ ] Criar `app/api/instagram/route.ts` — endpoint da API
+- [ ] Validação Playwright: posts mockados renderizados sem token de API
 
 ---
 
