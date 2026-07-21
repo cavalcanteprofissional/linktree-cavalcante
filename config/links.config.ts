@@ -22,24 +22,18 @@ export const links: LinkItem[] = [
     label: "WhatsApp",
     url: "https://wa.me/5585996859051",
     shortCode: "wpp",
-    icon: "whatsapp",
+    icon: "message-circle",
   },
   {
     label: "Portfólio",
     url: "https://cavalcanteprofissional.github.io/portfolio",
     shortCode: "portfolio",
-    icon: "external-link",
+    icon: "briefcase",
   },
   {
     label: "Lattes",
     url: "http://lattes.cnpq.br/7686247677030579",
     shortCode: "lattes",
-    icon: "external-link",
-  },
-  {
-    label: "Site",
-    url: "https://cavalcanteprofissional.com.br/",
-    shortCode: "site",
-    icon: "external-link",
+    icon: "book-open",
   },
 ];

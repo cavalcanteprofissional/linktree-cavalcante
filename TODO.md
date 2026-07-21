@@ -163,7 +163,13 @@ O MCP GitHub estará disponível em **qualquer projeto**. Ao reiniciar, vou exec
 
 ---
 
-## Etapa 10: Domínio Definitivo + Produção
+## Etapa 10: Ajustes nos Ícones + Remoção Botão Site ✅
+- [x] Substituído `whatsapp` (path Feather complexo) → `message-circle` (mais limpo)
+- [x] Adicionado `briefcase` para Portfólio
+- [x] Adicionado `book-open` para Lattes
+- [x] Removido botão "Site" dos configs
+
+## Etapa 11: Domínio Definitivo + Produção
 - [ ] ...
 
 ---
