@@ -1,10 +1,24 @@
-import { hasSupabase } from "./supabase";
-
-const staticLinksMap: Record<string, string> = {};
+import { hasSupabase, getSupabaseClient } from "./supabase";
+import { staticShortLinks } from "@/config/shortener-static.config";
 
 export async function resolveShortcode(code: string): Promise<string | null> {
   if (hasSupabase) {
-    // [PLACEHOLDER] Será implementado na Etapa 3
+    try {
+      const supabase = getSupabaseClient();
+      const { data, error } = await supabase
+        .from("links")
+        .select("destination_url")
+        .eq("short_code", code)
+        .eq("active", true)
+        .single();
+
+      if (!error && data) {
+        return data.destination_url;
+      }
+    } catch {
+      // fallback to static map on error
+    }
   }
-  return staticLinksMap[code] ?? null;
+
+  return staticShortLinks[code] ?? null;
 }

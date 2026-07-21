@@ -81,12 +81,21 @@ O MCP GitHub estará disponível em **qualquer projeto**. Ao reiniciar, vou exec
 
 ---
 
-## Etapa 3: Rota `/[shortcode]` com Fallback Estático (🏁 PRÓXIMA)
-- [ ] Criar `app/[shortcode]/route.ts` — rota dinâmica de redirect
-- [ ] Implementar lógica de resolução em `lib/shortener.ts` (fallback `staticShortLinks`)
-- [ ] Adicionar analytics fire-and-forget (`POST /api/analytics`)
-- [ ] Criar `app/api/analytics/route.ts` — endpoint no-op quando sem Supabase
-- [ ] Testar redirect real via Playwright (status 302) + fallback 404
+## Etapa 3: Rota `/[shortcode]` com Fallback Estático ✅
+
+- [x] Criar `app/[shortcode]/route.ts` — redirect 302 (conhecido) ou 307 (desconhecido → home)
+- [x] Implementar `lib/shortener.ts` — resolução: Supabase → `staticShortLinks` → null
+- [x] Criar `app/api/analytics/route.ts` — no-op quando sem Supabase (`source: "noop"`)
+- [x] Analytics fire-and-forget — POST assíncrono sem bloquear o redirect
+- [x] Testes Playwright: /portfolio → 302 para GitHub Pages; /unknown404 → 307 para home; analytics → 200
+
+---
+
+## Etapa 4: Criar Projeto Supabase + SQL (🏁 PRÓXIMA)
+- [ ] Criar conta/projeto no Supabase (free tier)
+- [ ] Rodar `schema.sql` → `rls.sql` → `seed.sql` no SQL editor
+- [ ] Configurar `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` no `.env.local`
+- [ ] Validar que `lib/supabase.ts` conecta e `hasSupabase` fica true
 
 ---
 

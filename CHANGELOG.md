@@ -53,10 +53,29 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `.env.example` com variáveis para Supabase, Instagram e domínio do encurtador
 - `CONTENT.md` para separação entre instruções técnicas (SKILL.md) e conteúdo real
 
+## [0.3.0] — 2026-07-20
+
+### Adicionado
+
+- **Rota `/[shortcode]`** — resolve shortcodes via Supabase (se configurado) ou mapa estático `shortener-static.config.ts`
+- **Redirect 302** para shortcodes conhecidos; **redirect 307** para home quando desconhecido
+- **Analytics fire-and-forget** — POST assíncrono para `/api/analytics` sem bloquear o usuário
+- **Endpoint `/api/analytics`** — registra clique no Supabase (se configurado) ou retorna `{ ok: true, source: "noop" }`
+
+### Alterado
+
+- `lib/shortener.ts` agora importa `staticShortLinks` do config e implementa a lógica completa de resolução (DB → estático → null)
+
+### Validação
+
+- Playwright: `/portfolio` → 302 + `Location: cavalcanteprofissional.github.io`
+- Playwright: `/unknown404` → 307 + `Location: localhost:3099/`
+- Playwright: `POST /api/analytics` → 200 + `{ ok: true, source: "noop" }`
+
 ### Pendente para próximas versões
 
 - [ ] Deploy inicial na Vercel (manual)
-- [ ] Rota `/[shortcode]` com redirecionamento (Etapa 3)
+- [ ] Projeto Supabase + schemas SQL (Etapa 4)
 - [ ] Projeto Supabase + schemas SQL (Etapa 4)
 - [ ] Analytics real com Supabase (Etapa 5)
 - [ ] Feed do Instagram com fallback mockado (Etapa 6)
