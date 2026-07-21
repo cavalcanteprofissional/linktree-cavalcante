@@ -154,6 +154,8 @@ O MCP GitHub estará disponível em **qualquer projeto**. Ao reiniciar, vou exec
 ---
 
 ## Etapa 9: Ajustes Finos Mobile-First + Deploy
+- [x] Fix `suppressHydrationWarning` no `<html>` (extensão Chrome `crxlauncher` causava erro)
+- [x] Meta description real no lugar de placeholder
 - [ ] Testar Lighthouse mobile (meta ≥ 90 perf)
 - [ ] Ajustar breakpoints e touch targets se necessário
 - [ ] Deploy na Vercel: criar repositório, importar, configurar env vars

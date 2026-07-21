@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "LinkTree Cavalcante",
-  description: "[PLACEHOLDER: bio/headline description]",
+  description: "Analista de Dados | IA & Machine Learning | Visão Computacional — LinkTree Cavalcante",
 };
 
 export default function RootLayout({
@@ -25,6 +25,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
     >
       <body className="min-h-dvh flex flex-col bg-slate-900 text-slate-50">
