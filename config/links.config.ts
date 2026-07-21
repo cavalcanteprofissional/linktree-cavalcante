@@ -7,14 +7,20 @@ export interface LinkItem {
 
 export const links: LinkItem[] = [
   {
-    label: "Instagram",
-    url: "https://instagram.com/[PLACEHOLDER_USERNAME]",
-    shortCode: "ig",
-    icon: "instagram",
+    label: "LinkedIn",
+    url: "https://linkedin.com/in/cavalcante-lucas",
+    shortCode: "in",
+    icon: "linkedin",
+  },
+  {
+    label: "GitHub",
+    url: "https://github.com/cavalcanteprofissional",
+    shortCode: "github",
+    icon: "github",
   },
   {
     label: "WhatsApp",
-    url: "https://wa.me/[PLACEHOLDER_NUMERO]",
+    url: "https://wa.me/5585996859051",
     shortCode: "wpp",
     icon: "whatsapp",
   },
@@ -25,9 +31,15 @@ export const links: LinkItem[] = [
     icon: "external-link",
   },
   {
-    label: "[PLACEHOLDER: label do link]",
-    url: "[PLACEHOLDER: URL do link]",
-    shortCode: "[PLACEHOLDER: shortcode]",
-    icon: "link",
+    label: "Lattes",
+    url: "http://lattes.cnpq.br/7686247677030579",
+    shortCode: "lattes",
+    icon: "external-link",
+  },
+  {
+    label: "Site",
+    url: "https://cavalcanteprofissional.com.br/",
+    shortCode: "site",
+    icon: "external-link",
   },
 ];

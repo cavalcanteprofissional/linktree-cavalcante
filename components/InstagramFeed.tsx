@@ -18,14 +18,14 @@ export default function InstagramFeed() {
   if (loading) {
     return (
       <div className="w-full mt-6">
-        <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">
+        <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">
           Instagram
         </h2>
         <div className="grid grid-cols-3 gap-1">
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
-              className="aspect-square rounded-sm bg-slate-800 animate-pulse"
+              className="aspect-square rounded-sm bg-secondary animate-pulse"
             />
           ))}
         </div>
@@ -37,17 +37,17 @@ export default function InstagramFeed() {
 
   return (
     <div className="w-full mt-6">
-      <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">
-        Instagram
-      </h2>
-      <div className="grid grid-cols-3 gap-1">
-        {posts.map((post) => (
-          <a
-            key={post.id}
-            href={post.permalink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative aspect-square overflow-hidden rounded-sm bg-slate-800"
+        <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+          Instagram
+        </h2>
+        <div className="grid grid-cols-3 gap-1">
+          {posts.map((post) => (
+            <a
+              key={post.id}
+              href={post.permalink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative aspect-square overflow-hidden rounded-sm bg-secondary"
           >
             <img
               src={post.imageUrl}

@@ -20,16 +20,16 @@ export default function ProfileHeader({
         <img
           src={avatar}
           alt={name}
-          className="w-24 h-24 rounded-full object-cover ring-2 ring-sky-400/50"
+          className="w-24 h-24 rounded-full object-cover ring-2 ring-blue-400/50"
         />
       ) : (
-        <div className="w-24 h-24 rounded-full bg-sky-400/20 flex items-center justify-center text-sky-400 text-3xl font-bold ring-2 ring-sky-400/30">
+        <div className="w-24 h-24 rounded-full bg-blue-400/20 flex items-center justify-center text-blue-400 text-3xl font-bold ring-2 ring-blue-400/30">
           {initials}
         </div>
       )}
       <div className="space-y-1">
-        <h1 className="text-xl font-bold text-slate-50">{name}</h1>
-        <p className="text-sm text-slate-400 max-w-xs">{bio}</p>
+        <h1 className="text-xl font-bold text-foreground">{name}</h1>
+        <p className="text-sm text-muted-foreground max-w-xs">{bio}</p>
       </div>
     </div>
   );

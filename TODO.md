@@ -131,7 +131,29 @@ O MCP GitHub estará disponível em **qualquer projeto**. Ao reiniciar, vou exec
 
 ---
 
-## Etapa 8: Ajustes Finos Mobile-First + Deploy (🏁 PRÓXIMA)
+## Etapa 8: Integração com Portfolio Real + Paleta Corporate Blue ✅
+
+### Conteúdo
+- [x] `CONTENT.md` populado com bio, links, avatar reais do portfolio
+- [x] `config/links.config.ts` — 6 links reais (LinkedIn, GitHub, WhatsApp, Portfolio, Lattes, Site)
+- [x] `config/shortener-static.config.ts` — shortcodes reais para todos os links
+- [x] `config/instagram-mock.config.ts` — posts mockados com conteúdo real
+
+### Estilo
+- [x] `app/globals.css` — paleta Corporate Blue com variáveis CSS (HSL)
+- [x] `components/ProfileHeader.tsx` — cores via variáveis CSS (blue-400 ring, text-foreground)
+- [x] `components/LinkButton.tsx` — cores via variáveis CSS + ícones LinkedIn e GitHub
+- [x] `components/InstagramFeed.tsx` — cores via variáveis CSS
+- [x] `app/page.tsx` — nome real, bio real, avatar real
+
+### Ícones
+- [x] Adicionado SVG do LinkedIn (path `linkedin`)
+- [x] Adicionado SVG do GitHub (path `github`)
+- [x] Botões usam `bg-secondary` + `border-border` + `hover:bg-primary/10`
+
+---
+
+## Etapa 9: Ajustes Finos Mobile-First + Deploy
 - [ ] Testar Lighthouse mobile (meta ≥ 90 perf)
 - [ ] Ajustar breakpoints e touch targets se necessário
 - [ ] Deploy na Vercel: criar repositório, importar, configurar env vars
@@ -139,17 +161,12 @@ O MCP GitHub estará disponível em **qualquer projeto**. Ao reiniciar, vou exec
 
 ---
 
-## Etapa 8: Ajustes Finos Mobile-First
+## Etapa 10: Domínio Definitivo + Produção
 - [ ] ...
 
 ---
 
-## Etapa 9: Domínio Definitivo + Produção
-- [ ] ...
-
----
-
-## Etapa 10: Pipeline Python de Agregação (opcional)
+## Etapa 11: Pipeline Python de Agregação (opcional)
 - [ ] ...
 
 ---

@@ -8,8 +8,9 @@ export default function Home() {
     <div className="flex flex-col items-center min-h-dvh px-4">
       <main className="flex flex-col items-center w-full max-w-md gap-6 py-16">
         <ProfileHeader
-          name="LinkTree Cavalcante"
-          bio="[PLACEHOLDER: bio/headline]"
+          name="Lucas Cavalcante"
+          bio="Analista de Dados | IA &amp; Machine Learning | Visão Computacional"
+          avatar="https://cavalcanteprofissional.github.io/portfolio/images/profile/foto-perfil.webp"
         />
         <div className="w-full flex flex-col gap-3">
           {links.map((link) => (

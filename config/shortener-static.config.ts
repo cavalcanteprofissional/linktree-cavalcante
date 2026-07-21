@@ -1,6 +1,8 @@
 export const staticShortLinks: Record<string, string> = {
-  ig: "https://instagram.com/[PLACEHOLDER_USERNAME]",
-  wpp: "https://wa.me/[PLACEHOLDER_NUMERO]",
+  in: "https://linkedin.com/in/cavalcante-lucas",
+  github: "https://github.com/cavalcanteprofissional",
+  wpp: "https://wa.me/5585996859051",
   portfolio: "https://cavalcanteprofissional.github.io/portfolio",
-  "[PLACEHOLDER: shortcode]": "[PLACEHOLDER: URL]",
+  lattes: "http://lattes.cnpq.br/7686247677030579",
+  site: "https://cavalcanteprofissional.com.br/",
 };
