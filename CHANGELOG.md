@@ -111,8 +111,33 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Mobile: feed visível, 3 imagens renderizadas
 - Desktop: screenshot com feed completo
 
+## [0.6.0] — 2026-07-20
+
+### Adicionado
+
+- **Integração real Meta Graph API**: token e account ID da `cavalcanteprofissional` (MEDIA_CREATOR)
+- `lib/instagram.ts` ajustado para `graph.instagram.com` (compatível com contas Creator)
+
+### Alterado
+
+- `lib/instagram.ts`: fallback agora ocorre mesmo quando API retorna 0 posts (antes só em erro HTTP)
+- `lib/instagram.ts`: logs detalhados em dev (API retornou X posts, fallback ativado, etc.)
+- `.env.local`: `INSTAGRAM_ACCESS_TOKEN` + `INSTAGRAM_BUSINESS_ACCOUNT_ID` adicionados
+
+### Comportamento
+
+1. Token presente → API real (`graph.instagram.com/me/media`)
+2. API retorna 0 posts → fallback Supabase (`instagram_posts_mock`)
+3. Sem Supabase → fallback `config/instagram-mock.config.ts`
+4. Tudo vazio → array vazio (sem quebras)
+
+### Validação
+
+- `/api/instagram` → 200 + `source: "mock"` + 3 posts do Supabase
+- Fallback funcional com token real ativo mas conta sem posts
+
 ### Pendente para próximas versões
 
 - [ ] Deploy inicial na Vercel (manual)
-- [ ] Integração Meta Graph API (Etapa 7)
+- [ ] Ajustes finos mobile-first (Etapa 8)
 - [ ] Pipeline Python de agregação (Etapa 10)

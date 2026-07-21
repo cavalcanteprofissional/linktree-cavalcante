@@ -121,28 +121,21 @@ O MCP GitHub estará disponível em **qualquer projeto**. Ao reiniciar, vou exec
 
 ---
 
-## Etapa 3: Rota `/[shortcode]` com Fallback Estático
-- [ ] ...
+## Etapa 7: Integração Real Meta Graph API ✅
+
+- [x] Token e Account ID adicionados ao `.env.local`
+- [x] `lib/instagram.ts` atualizado para `graph.instagram.com` (API compatível c/ Creator)
+- [x] API real: retorna 0 posts (conta sem publicações) → cai no fallback corretamente
+- [x] Fallback: Supabase `instagram_posts_mock` → `config/instagram-mock.config.ts`
+- [x] Validação Playwright: `/api/instagram` → 200 + `source: "mock"` + 3 posts
 
 ---
 
-## Etapa 4: Projeto Supabase + SQL
-- [ ] ...
-
----
-
-## Etapa 5: Conectar Supabase + Analytics Real
-- [ ] ...
-
----
-
-## Etapa 6: Feed Instagram com Fallback Mockado
-- [ ] ...
-
----
-
-## Etapa 7: Integração Real Meta Graph API
-- [ ] ...
+## Etapa 8: Ajustes Finos Mobile-First + Deploy (🏁 PRÓXIMA)
+- [ ] Testar Lighthouse mobile (meta ≥ 90 perf)
+- [ ] Ajustar breakpoints e touch targets se necessário
+- [ ] Deploy na Vercel: criar repositório, importar, configurar env vars
+- [ ] Validar domínio `*.vercel.app` funcionando
 
 ---
 

@@ -15,10 +15,9 @@ const hasToken =
 
 async function fetchFromApi(): Promise<InstagramPost[]> {
   const token = process.env.INSTAGRAM_ACCESS_TOKEN!;
-  const accountId = process.env.INSTAGRAM_BUSINESS_ACCOUNT_ID!;
 
   const res = await fetch(
-    `https://graph.facebook.com/v22.0/${accountId}/media?fields=id,media_url,caption,permalink&access_token=${token}`,
+    `https://graph.instagram.com/me/media?fields=id,media_url,caption,permalink&access_token=${token}`,
     { next: { revalidate: 1800 } }
   );
 
@@ -29,13 +28,23 @@ async function fetchFromApi(): Promise<InstagramPost[]> {
   }
 
   const data = await res.json();
-  return (data.data ?? []).map((p: Record<string, string>) => ({
+  const posts = (data.data ?? []).map((p: Record<string, string>) => ({
     id: p.id,
     imageUrl: p.media_url,
     caption: p.caption ?? "",
     permalink: p.permalink,
     source: "api" as const,
   }));
+
+  if (process.env.NODE_ENV === "development") {
+    if (posts.length === 0) {
+      console.log("[instagram] API retornou 0 posts — usando fallback");
+    } else {
+      console.log(`[instagram] API retornou ${posts.length} posts`);
+    }
+  }
+
+  return posts;
 }
 
 async function fetchFromSupabase(): Promise<InstagramPost[]> {
@@ -69,7 +78,11 @@ function fetchFromConfig(): InstagramPost[] {
 export async function fetchInstagramFeed(): Promise<InstagramPost[]> {
   if (hasToken) {
     try {
-      return await fetchFromApi();
+      const fromApi = await fetchFromApi();
+      if (fromApi.length > 0) return fromApi;
+      if (process.env.NODE_ENV === "development") {
+        console.log("[instagram] API retornou 0 posts — tentando fallback");
+      }
     } catch (err) {
       console.warn("[instagram] API failed, falling back:", err);
     }
@@ -80,5 +93,9 @@ export async function fetchInstagramFeed(): Promise<InstagramPost[]> {
     if (fromDb.length > 0) return fromDb;
   }
 
-  return fetchFromConfig();
+  const fromConfig = fetchFromConfig();
+  if (fromConfig.length > 0) return fromConfig;
+
+  // último fallback: se tudo vazio, retorna array vazio
+  return [];
 }
