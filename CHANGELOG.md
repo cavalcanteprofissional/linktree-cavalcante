@@ -92,9 +92,27 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Playwright: `/unknown404` → 307 + `Location: localhost:3099/`
 - Playwright: `POST /api/analytics` → 200 + `{ ok: true, source: "noop" }`
 
+## [0.5.0] — 2026-07-20
+
+### Adicionado
+
+- **`lib/instagram.ts`** — lógica completa: tenta Meta Graph API → Supabase mock → config estático (3 níveis de fallback)
+- **`app/api/instagram/route.ts`** — GET `/api/instagram` com `revalidate: 1800` (30 min cache)
+- **`components/InstagramFeed.tsx`** — grid 3 colunas, loading com skeleton, hover com caption, cliente-side fetch
+- **`config/instagram-mock.config.ts`** — 3 posts placeholder (imagens `placehold.co`)
+
+### Alterado
+
+- `app/page.tsx` — `<InstagramFeed />` adicionado abaixo dos links
+
+### Validação
+
+- `/api/instagram` → 200 + `source: "mock"` + 3 posts retornados
+- Mobile: feed visível, 3 imagens renderizadas
+- Desktop: screenshot com feed completo
+
 ### Pendente para próximas versões
 
 - [ ] Deploy inicial na Vercel (manual)
-- [ ] Feed do Instagram com fallback mockado (Etapa 6)
 - [ ] Integração Meta Graph API (Etapa 7)
 - [ ] Pipeline Python de agregação (Etapa 10)

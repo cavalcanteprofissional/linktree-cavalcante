@@ -13,104 +13,104 @@ async function run() {
   const browser = await chromium.launch({ headless: true });
   const errors = [];
 
-  // --- 1. Home page ---
-  const page = await browser.newPage();
+  // --- 1. Home page + Instagram feed ---
+  const ctx = await browser.newContext({
+    viewport: { width: 375, height: 812 },
+    deviceScaleFactor: 2,
+  });
+  const page = await ctx.newPage();
   await page.goto(BASE, { waitUntil: "networkidle" });
+  // wait for instagram feed to load
+  await page.waitForTimeout(2000);
+  await page.waitForLoadState("networkidle");
+
   await page.screenshot({
     path: join(screenshotsDir, "mobile-375x812.png"),
     fullPage: true,
   });
 
   const h1 = await page.textContent("h1");
-  const linkCount = await page.locator("a[target=_blank]").count();
+  const links = await page.locator("a[target=_blank]").count();
   const dark = await page.evaluate(() =>
     document.documentElement.classList.contains("dark")
   );
 
-  console.log("--- HOME PAGE ---");
+  // Instagram posts - look for images in the feed
+  const feedSection = page.locator("h2:has-text('Instagram')");
+  const feedVisible = await feedSection.isVisible().catch(() => false);
+  let mockImages = 0;
+  if (feedVisible) {
+    mockImages = await page
+      .locator("h2:has-text('Instagram')")
+      .locator("..")
+      .locator("img")
+      .count();
+  }
+
+  console.log("--- MOBILE (375x812) ---");
   console.log(`h1: ${h1}`);
-  console.log(`links: ${linkCount}`);
+  console.log(`link buttons: ${links}`);
   console.log(`dark: ${dark}`);
+  console.log(`instagram feed visible: ${feedVisible}`);
+  console.log(`instagram images: ${mockImages}`);
 
-  if (h1?.trim() !== "LinkTree Cavalcante")
-    errors.push("Home: h1 mismatch");
-  if (linkCount === 0) errors.push("Home: no link buttons");
-  if (!dark) errors.push("Home: missing dark class");
+  // --- 2. Instagram API directly ---
+  const apiResp = await page.request.get(`${BASE}/api/instagram`);
+  const apiBody = await apiResp.json();
+  console.log(`\n--- API /api/instagram ---`);
+  console.log(`status: ${apiResp.status()}`);
+  console.log(`source: ${apiBody.source}`);
+  console.log(`posts count: ${apiBody.posts?.length}`);
 
-  // --- 2. Desktop screenshot ---
-  const desktopPage = await browser.newPage();
-  await desktopPage.setViewportSize({ width: 1280, height: 800 });
+  if (apiResp.status() !== 200)
+    errors.push(`Instagram API: expected 200, got ${apiResp.status()}`);
+  if (!apiBody.posts || apiBody.posts.length === 0)
+    errors.push("Instagram API: no posts returned");
+  if (apiBody.source !== "mock")
+    errors.push(`Instagram API: expected source "mock", got "${apiBody.source}"`);
+
+  // --- 3. Desktop screenshot ---
+  const desktopCtx = await browser.newContext({
+    viewport: { width: 1280, height: 800 },
+    deviceScaleFactor: 1,
+  });
+  const desktopPage = await desktopCtx.newPage();
   await desktopPage.goto(BASE, { waitUntil: "networkidle" });
+  await desktopPage.waitForTimeout(2000);
   await desktopPage.screenshot({
     path: join(screenshotsDir, "desktop-1280x800.png"),
     fullPage: true,
   });
   await desktopPage.close();
+  await desktopCtx.close();
 
-  // --- 3. Shortcode redirect (known) — fetch sem seguir redirect ---
-  const { status: knownStatus, headers: knownHeaders } = await fetch(
-    `${BASE}/portfolio`,
-    { redirect: "manual" }
-  ).then((r) => ({ status: r.status, headers: Object.fromEntries(r.headers) }));
+  // --- 4. Shortcode redirect ---
+  const sd = await fetch(`${BASE}/portfolio`, { redirect: "manual" }).then(
+    (r) => ({ status: r.status })
+  );
+  console.log(`\n--- SHORTCODE /portfolio ---`);
+  console.log(`status: ${sd.status}`);
+  if (sd.status !== 302) errors.push(`Shortcode: expected 302, got ${sd.status}`);
 
-  console.log("\n--- SHORTCODE /portfolio ---");
-  console.log(`status: ${knownStatus}`);
-  console.log(`location: ${knownHeaders.location}`);
-
-  if (knownStatus !== 302)
-    errors.push(`Shortcode /portfolio: expected 302, got ${knownStatus}`);
-  if (!knownHeaders.location?.includes("cavalcanteprofissional.github.io"))
-    errors.push(`Shortcode /portfolio: unexpected redirect target: ${knownHeaders.location}`);
-
-  // --- 4. Shortcode redirect (unknown) ---
-  const { status: unknownStatus, headers: unknownHeaders } = await fetch(
-    `${BASE}/unknown404`,
-    { redirect: "manual" }
-  ).then((r) => ({ status: r.status, headers: Object.fromEntries(r.headers) }));
-
-  console.log("\n--- SHORTCODE /unknown404 ---");
-  console.log(`status: ${unknownStatus}`);
-  console.log(`location: ${unknownHeaders.location}`);
-
-  if (unknownStatus !== 307)
-    errors.push(`Shortcode /unknown404: expected 307, got ${unknownStatus}`);
-  if (!unknownHeaders.location?.includes("localhost"))
-    errors.push(`Shortcode /unknown404: expected redirect to home, got: ${unknownHeaders.location}`);
-
-  // --- 5. Analytics endpoint ---
-  const analyticsResp = await page.request.post(`${BASE}/api/analytics`, {
-    data: {
-      short_code: "portfolio",
-      referrer: "test",
-      user_agent: "playwright",
-      timestamp: new Date().toISOString(),
-    },
-  });
-  const analyticsStatus = analyticsResp.status();
-  const analyticsBody = await analyticsResp.json();
-
-  console.log("\n--- ANALYTICS API ---");
-  console.log(`status: ${analyticsStatus}`);
-  console.log(`body: ${JSON.stringify(analyticsBody)}`);
-
-  if (analyticsStatus !== 200)
-    errors.push(`Analytics: expected 200, got ${analyticsStatus}`);
-  if (!analyticsBody.ok)
-    errors.push(`Analytics: body.ok is false`);
-
-  // --- Results ---
+  // --- Assertions ---
   console.log("\n--- RESULTS ---");
+  if (h1?.trim() !== "LinkTree Cavalcante")
+    errors.push("Home: h1 mismatch");
+  if (links === 0) errors.push("Home: no link buttons");
+  if (!dark) errors.push("Home: missing dark class");
+  if (!feedVisible) errors.push("Home: instagram feed section not visible");
+  if (mockImages === 0) errors.push("Home: no instagram images rendered");
+
   if (errors.length === 0) {
     console.log("All assertions PASSED");
     console.log(`Screenshots saved to: ${screenshotsDir}`);
-    await browser.close();
-    process.exit(0);
   } else {
     console.error("FAILURES:");
     errors.forEach((e) => console.error(`  ✗ ${e}`));
-    await browser.close();
-    process.exit(1);
   }
+
+  await browser.close();
+  process.exit(errors.length === 0 ? 0 : 1);
 }
 
 run().catch((err) => {

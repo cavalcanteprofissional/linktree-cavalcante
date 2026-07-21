@@ -110,12 +110,14 @@ O MCP GitHub estará disponível em **qualquer projeto**. Ao reiniciar, vou exec
 
 ---
 
-## Etapa 6: Feed Instagram com Fallback Mockado (🏁 PRÓXIMA)
-- [ ] Popular `config/instagram-mock.config.ts` com posts mockados (placeholders)
-- [ ] Implementar `lib/instagram.ts` — chamada à Meta Graph API + fallback mock
-- [ ] Implementar `components/InstagramFeed.tsx` — grid 3 colunas com posts
-- [ ] Criar `app/api/instagram/route.ts` — endpoint da API
-- [ ] Validação Playwright: posts mockados renderizados sem token de API
+## Etapa 6: Feed Instagram com Fallback Mockado ✅
+
+- [x] `config/instagram-mock.config.ts` — 3 posts placeholder (placehold.co 400x400)
+- [x] `lib/instagram.ts` — lógica completa: Meta API → Supabase mock → config mock
+- [x] `app/api/instagram/route.ts` — GET com `revalidate: 1800` (30 min cache)
+- [x] `components/InstagramFeed.tsx` — grid 3 colunas, loading spinner, fallback vazio
+- [x] `app/page.tsx` — InstagramFeed adicionado abaixo dos links
+- [x] Validação Playwright: posts mockados renderizados sem token, sem Supabase
 
 ---
 

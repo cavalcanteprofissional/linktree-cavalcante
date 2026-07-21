@@ -1,5 +1,6 @@
 import ProfileHeader from "@/components/ProfileHeader";
 import LinkButton from "@/components/LinkButton";
+import InstagramFeed from "@/components/InstagramFeed";
 import { links } from "@/config/links.config";
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
             />
           ))}
         </div>
+        <InstagramFeed />
       </main>
     </div>
   );
