@@ -4,5 +4,4 @@ export const staticShortLinks: Record<string, string> = {
   wpp: "https://wa.me/5585996859051",
   portfolio: "https://cavalcanteprofissional.github.io/portfolio",
   lattes: "http://lattes.cnpq.br/7686247677030579",
-  site: "https://cavalcanteprofissional.com.br/",
 };
