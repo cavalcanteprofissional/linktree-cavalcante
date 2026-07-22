@@ -1,196 +1,47 @@
 # TODO — LinkTree Cavalcante
 
-> Plano de implementação progressiva. Cada etapa é validada com Playwright antes de avançar.
+---
+
+## ✅ Etapas 1–12 Concluídas
+
+Scaffold, página estática, encurtador, Supabase, analytics, feed Instagram, Meta API, paleta Corporate Blue, refinamentos perf/SEO/a11y, dashboard analytics, correção Instagram placeholder.
+
+Mudanças entregues:
+- `next/image` no avatar e Instagram feed (com `remotePatterns`)
+- SVGs extraídos para `lib/icons.ts` + ícone `message-circle` corrigido
+- `aria-hidden`, `focus-visible`, `aria-label`, `alt` fallback
+- OG tags, sitemap, robots.txt, theme-color
+- `app/error.tsx` + `app/not-found.tsx`
+- Logs nos catch blocks silenciosos
+- `noUncheckedIndexedAccess` ativado
+- Dashboard analytics completo (6 APIs + Recharts)
+- Validação de URLs no fetch do Instagram (ignora placeholders)
+- Pipeline Python de agregação
 
 ---
 
-## Setup GitHub MCP Server (Global) ✅
+## ✅ Etapa 13: Footer + Dashboard Button + Avatar Local
 
-### Configuração
-- [x] MCP GitHub adicionado ao config **global** `~/.config/opencode/opencode.json`
-- [x] Token via `{env:GITHUB_TOKEN}` (interpolação segura, sem segredo em arquivo)
-- [x] `opencode.json` local deletado (não precisa mais)
-- [x] `.gitignore` revertido (sem entrada para `opencode.json`)
-- [x] `GITHUB_TOKEN` salvo como variável de ambiente persistente do Windows (User scope)
-
-### ▶️ Após reiniciar o opencode
-
-O MCP GitHub estará disponível em **qualquer projeto**. Ao reiniciar, vou executar automaticamente:
-
-1. `git init` + `git add .` + `git commit -m "v0.1.0: scaffold Next.js + dark mode + estrutura de pastas"`
-2. `gh repo create linktree-cavalcante --public --description "Landing page pessoal estilo Linktree com encurtador de URL próprio e feed do Instagram"`
-3. `git push origin main`
-4. Iniciar **Etapa 2** — Página Linktree estática
+- [x] Foto de perfil baixada para `public/images/foto-perfil.webp`
+- [x] `app/page.tsx` usando avatar local
+- [x] `components/Footer.tsx` com assinatura (REF-FOOTER-ASSINATURA.md)
+- [x] Footer incluído no `app/layout.tsx` (global)
+- [x] Botão "📊 Analytics" no fim da página inicial
+- [x] `REF-FOOTER-ASSINATURA.md` movido para `docs/`
 
 ---
 
-## Etapa 1: Scaffold Next.js + Tailwind + Deploy Inicial ✅
+## 🔄 Pendente: Deploy Vercel
 
-### 1. Scaffold Next.js + Tailwind + Dark Mode
-- [x] `npx create-next-app@latest .` com App Router, TypeScript, Tailwind
-- [x] Estrutura de pastas: `components/`, `config/`, `lib/`, `supabase/`, `scripts/`
-- [x] Tailwind dark mode configurado (estratégia `class`)
-- [x] Paleta provisória: bg slate-900, texto slate-50, acento sky-400
+1. Acesse https://vercel.com/login e faça login com GitHub
+2. **"Add New..." → "Project"** → importe `cavalcanteprofissional/linktree-cavalcante`
+3. Em **Environment Variables**, adicione:
+   - `SUPABASE_URL` = `https://ezcrzdbfdxchqpckrfan.supabase.co`
+   - `SUPABASE_SERVICE_ROLE_KEY` = (copiar do `.env.local`)
+   - `INSTAGRAM_ACCESS_TOKEN` = (copiar do `.env.local`)
+   - `INSTAGRAM_BUSINESS_ACCOUNT_ID` = `17841412670747535`
+4. **"Deploy"** e validar domínio
 
-### 2. Placeholders e Arquivos de Configuração
-- [x] `config/links.config.ts` — array com tipagem `LinkItem[]`
-- [x] `config/instagram-mock.config.ts` — array com tipagem `InstagramMockPost[]`
-- [x] `components/LinkButton.tsx` — componente placeholder
-- [x] `components/InstagramFeed.tsx` — componente placeholder
-- [x] `components/ProfileHeader.tsx` — componente placeholder
-- [x] `lib/supabase.ts` — client server-side (com fallback `hasSupabase`)
-- [x] `lib/instagram.ts` — wrapper com tipo normalizado `InstagramPost`
-- [x] `lib/shortener.ts` — lógica de resolução com fallback estático
-- [x] `supabase/schema.sql` — 4 tabelas (links, link_clicks, link_clicks_daily, instagram_posts_mock)
-- [x] `supabase/rls.sql` — políticas de Row Level Security
-- [x] `supabase/seed.sql` — dados de exemplo com placeholders
-- [x] `scripts/analytics_pipeline.py` — placeholder com detecção de env vars
-- [x] `.env.example` — variáveis de ambiente documentadas
-- [x] `CONTENT.md` — template para preenchimento de conteúdo real
+## 📋 Domínio Definitivo (futuro)
 
-### 3. Página Principal
-- [x] Título: "LinkTree Cavalcante"
-- [x] Subtítulo: "[PLACEHOLDER: bio/headline]"
-- [x] Avatar placeholder (iniciais "LC")
-- [x] Container centralizado mobile-first (max-w-md)
-- [x] 3 skeletons como placeholder dos links
-
-### 4. Vercel Deploy
-- [ ] `git init && git add . && git commit -m "init: scaffold Next.js"`
-- [ ] Criar repositório no GitHub
-- [ ] Importar no dashboard Vercel como `linktree-cavalcante`
-
-### 5. Validação com Playwright
-- [x] Build limpo (`npm run build` sem erros)
-- [x] Dev server local rodando
-- [x] Screenshot mobile 375×812
-- [x] Screenshot desktop 1280×800
-- [x] DOM: h1 "LinkTree Cavalcante", classe `dark`, bg slate-900, 3 skeletons
-
----
-
-## Etapa 2: Página Linktree Estática ✅
-
-- [x] Popular `config/links.config.ts` com links (placeholders: Instagram, WhatsApp, Portfólio, + extra)
-- [x] Criar `config/shortener-static.config.ts` — mapa estático `short_code → URL`
-- [x] Implementar `components/ProfileHeader.tsx` (avatar com iniciais + bio + nome)
-- [x] Implementar `components/LinkButton.tsx` (botão de link com SVG inline + label, hover sky-400)
-- [x] Refatorar `app/page.tsx` para consumir ProfileHeader + LinkButton + `links.config.ts`
-- [x] Layout responsivo: mobile-first (max-w-md) + centralizado
-- [x] Validação Playwright: 4 link buttons renderizados, 0 skeletons, h1 + bio ok
-
----
-
-## Etapa 3: Rota `/[shortcode]` com Fallback Estático ✅
-
-- [x] Criar `app/[shortcode]/route.ts` — redirect 302 (conhecido) ou 307 (desconhecido → home)
-- [x] Implementar `lib/shortener.ts` — resolução: Supabase → `staticShortLinks` → null
-- [x] Criar `app/api/analytics/route.ts` — no-op quando sem Supabase (`source: "noop"`)
-- [x] Analytics fire-and-forget — POST assíncrono sem bloquear o redirect
-- [x] Testes Playwright: /portfolio → 302 para GitHub Pages; /unknown404 → 307 para home; analytics → 200
-
----
-
-## Etapa 4: Criar Projeto Supabase + SQL ✅
-
-- [x] Criado projeto Supabase free tier `linktree-cavalcante` (ref: `ezcrzdbfdxchqpckrfan`)
-- [x] Rodados `schema.sql` → `rls.sql` → `seed.sql` via SQL Editor
-- [x] `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` configurados no `.env.local`
-- [x] Config global do MCP atualizada com novo project_ref
-- [x] Verificado: `hasSupabase = true`, tabelas com seed data
-
----
-
-## Etapa 5: Conectar Analytics Real + Validar Fluxo Completo ✅
-
-- [x] Testado redirect `/portfolio` + analytics registrado em `link_clicks` (2 cliques no Supabase real)
-- [x] `/api/analytics` retorna `source: "supabase"` com .env.local ativo
-- [x] `/api/analytics` retorna `source: "noop"` sem .env.local (fallback confirmado)
-- [x] Fallback do shortener: sem Supabase → `staticShortLinks`, com Supabase → DB
-
----
-
-## Etapa 6: Feed Instagram com Fallback Mockado ✅
-
-- [x] `config/instagram-mock.config.ts` — 3 posts placeholder (placehold.co 400x400)
-- [x] `lib/instagram.ts` — lógica completa: Meta API → Supabase mock → config mock
-- [x] `app/api/instagram/route.ts` — GET com `revalidate: 1800` (30 min cache)
-- [x] `components/InstagramFeed.tsx` — grid 3 colunas, loading spinner, fallback vazio
-- [x] `app/page.tsx` — InstagramFeed adicionado abaixo dos links
-- [x] Validação Playwright: posts mockados renderizados sem token, sem Supabase
-
----
-
-## Etapa 7: Integração Real Meta Graph API ✅
-
-- [x] Token e Account ID adicionados ao `.env.local`
-- [x] `lib/instagram.ts` atualizado para `graph.instagram.com` (API compatível c/ Creator)
-- [x] API real: retorna 0 posts (conta sem publicações) → cai no fallback corretamente
-- [x] Fallback: Supabase `instagram_posts_mock` → `config/instagram-mock.config.ts`
-- [x] Validação Playwright: `/api/instagram` → 200 + `source: "mock"` + 3 posts
-
----
-
-## Etapa 8: Integração com Portfolio Real + Paleta Corporate Blue ✅
-
-### Conteúdo
-- [x] `CONTENT.md` populado com bio, links, avatar reais do portfolio
-- [x] `config/links.config.ts` — 6 links reais (LinkedIn, GitHub, WhatsApp, Portfolio, Lattes, Site)
-- [x] `config/shortener-static.config.ts` — shortcodes reais para todos os links
-- [x] `config/instagram-mock.config.ts` — posts mockados com conteúdo real
-
-### Estilo
-- [x] `app/globals.css` — paleta Corporate Blue com variáveis CSS (HSL)
-- [x] `components/ProfileHeader.tsx` — cores via variáveis CSS (blue-400 ring, text-foreground)
-- [x] `components/LinkButton.tsx` — cores via variáveis CSS + ícones LinkedIn e GitHub
-- [x] `components/InstagramFeed.tsx` — cores via variáveis CSS
-- [x] `app/page.tsx` — nome real, bio real, avatar real
-
-### Ícones
-- [x] Adicionado SVG do LinkedIn (path `linkedin`)
-- [x] Adicionado SVG do GitHub (path `github`)
-- [x] Botões usam `bg-secondary` + `border-border` + `hover:bg-primary/10`
-
----
-
-## Etapa 9: Ajustes Finos Mobile-First + Deploy
-- [x] Fix `suppressHydrationWarning` no `<html>` (extensão Chrome `crxlauncher` causava erro)
-- [x] Meta description real no lugar de placeholder
-- [ ] Testar Lighthouse mobile (meta ≥ 90 perf)
-- [ ] Ajustar breakpoints e touch targets se necessário
-- [ ] Deploy na Vercel: criar repositório, importar, configurar env vars
-- [ ] Validar domínio `*.vercel.app` funcionando
-
----
-
-## Etapa 10: Ajustes nos Ícones + Remoção Botão Site ✅
-- [x] Substituído `whatsapp` (path Feather complexo) → `message-circle` (mais limpo)
-- [x] Adicionado `briefcase` para Portfólio
-- [x] Adicionado `book-open` para Lattes
-- [x] Removido botão "Site" dos configs
-
-## Etapa 11: Domínio Definitivo + Produção
 - [ ] ...
-
----
-
-## Etapa 11: Pipeline Python de Agregação (opcional)
-- [ ] ...
-
----
-
-## Como usar Vercel CLI (passo a passo)
-
-```bash
-# 1. Instalar CLI globalmente
-npm i -g vercel
-
-# 2. Fazer login
-vercel login
-
-# 3. Link ao projeto (depois do deploy manual no dashboard)
-vercel link
-
-# 4. Deploy para produção
-vercel --prod
-```

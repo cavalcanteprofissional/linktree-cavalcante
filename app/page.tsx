@@ -10,7 +10,7 @@ export default function Home() {
         <ProfileHeader
           name="Lucas Cavalcante"
           bio="Analista de Dados | IA &amp; Machine Learning | Visão Computacional"
-          avatar="https://cavalcanteprofissional.github.io/portfolio/images/profile/foto-perfil.webp"
+          avatar="/images/foto-perfil.webp"
         />
         <div className="w-full flex flex-col gap-3">
           {links.map((link) => (
@@ -23,6 +23,12 @@ export default function Home() {
           ))}
         </div>
         <InstagramFeed />
+        <a
+          href="/dashboard"
+          className="text-xs text-muted-foreground hover:text-primary transition-colors mt-2"
+        >
+          📊 Analytics
+        </a>
       </main>
     </div>
   );

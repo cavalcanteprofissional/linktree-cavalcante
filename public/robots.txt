@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://linktree-cavalcante.vercel.app/sitemap.xml

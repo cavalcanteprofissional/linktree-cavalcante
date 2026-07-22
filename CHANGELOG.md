@@ -7,6 +7,59 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [0.9.0] — 2026-07-22
+
+### Adicionado
+
+- **Footer global** com assinatura "Produzido por" + `assinatura-lucas.png` no layout
+- **Botão "📊 Analytics"** na página inicial, linkando para `/dashboard`
+- **Avatar local** em `public/images/foto-perfil.webp` (substitui URL externa do portfólio)
+- `docs/REF-FOOTER-ASSINATURA.md` movido da raiz para documentação
+
+## [0.8.0] — 2026-07-22
+
+### Adicionado
+
+- **Dashboard Analytics** (`/dashboard`) com 4 métricas, gráficos Recharts e tabelas
+- **6 APIs de dados**: `stats`, `clicks`, `links`, `referrers`, `recent`, `auth`
+- **Login condicional**: sem `DASHBOARD_PASSWORD`, dashboard aberto; com senha, exige login
+- `lib/dashboard-auth.ts` — pbkdf2 + cookie para sessão
+- `lib/dashboard-api.ts` — queries agregadas ao Supabase
+- `lib/icons.ts` — paths SVG extraídos de `LinkButton.tsx`
+- `app/error.tsx` — error boundary customizado
+- `app/not-found.tsx` — página 404 customizada
+- `app/sitemap.ts` — sitemap.xml
+- `public/robots.txt` — instruções para crawlers
+- `scripts/analytics_pipeline.py` — pipeline Python de agregação
+
+### Alterado
+
+- **`<img>` → `next/image`** no `ProfileHeader` e `InstagramFeed`
+- **LinkButton.tsx** — SVGs importam de `lib/icons.ts`; adicionado `aria-hidden`, `focus-visible`, `aria-label`
+- **layout.tsx** — OG tags, Twitter card, theme-color, metadataBase, robots
+- **InstagramFeed.tsx** — `next/image`, `alt` fallback, `console.warn` no catch
+- **lib/shortener.ts** — logging em catch blocks
+- **lib/instagram.ts** — logging no catch, validação de URL no `fetchFromSupabase`
+- **Instagram mock** (`instagram_posts_mock`) — URLs reais no seed.sql
+- **tsconfig.json** — `noUncheckedIndexedAccess` ativado
+- **.env.example** — removido `NEXT_PUBLIC_SUPABASE_ANON_KEY` (não usado), adicionado `DASHBOARD_PASSWORD`
+- **next.config.ts** — `remotePatterns` configurado
+
+### Corrigido
+
+- **Ícone WhatsApp** — adicionado path `message-circle` em `lib/icons.ts` (estava sem fallback)
+- **Instagram feed** — valida URLs do Supabase com `new URL()` para ignorar placeholders
+
+## [0.7.0] — 2026-07-21
+
+### Adicionado
+- Conteúdo real do portfolio (bio, links, avatar)
+- Paleta Corporate Blue com variáveis CSS HSL
+- Ícones LinkedIn, GitHub, briefcase, book-open, message-circle
+
+### Removido
+- Botão "Site" dos links
+
 ## [0.2.0] — 2026-07-20
 
 ### Adicionado

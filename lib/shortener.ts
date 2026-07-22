@@ -15,8 +15,14 @@ export async function resolveShortcode(code: string): Promise<string | null> {
       if (!error && data) {
         return data.destination_url;
       }
-    } catch {
-      // fallback to static map on error
+
+      if (error && process.env.NODE_ENV === "development") {
+        console.warn(`[shortener] Supabase lookup failed for "${code}":`, error);
+      }
+    } catch (err) {
+      if (process.env.NODE_ENV === "development") {
+        console.warn(`[shortener] Supabase exception for "${code}":`, err);
+      }
     }
   }
 

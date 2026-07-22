@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import type { InstagramPost } from "@/lib/instagram";
 
 export default function InstagramFeed() {
@@ -11,7 +12,10 @@ export default function InstagramFeed() {
     fetch("/api/instagram")
       .then((r) => r.json())
       .then((data) => setPosts(data.posts ?? []))
-      .catch(() => setPosts([]))
+      .catch((err) => {
+        console.warn("[instagram-feed] fetch failed:", err);
+        setPosts([]);
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -49,11 +53,12 @@ export default function InstagramFeed() {
               rel="noopener noreferrer"
               className="group relative aspect-square overflow-hidden rounded-sm bg-secondary"
           >
-            <img
+            <Image
               src={post.imageUrl}
-              alt={post.caption}
+              alt={post.caption || "Post do Instagram"}
+              width={400}
+              height={400}
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-              loading="lazy"
             />
             {post.caption && (
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-2 opacity-0 group-hover:opacity-100 transition-opacity">

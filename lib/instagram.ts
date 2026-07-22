@@ -47,6 +47,15 @@ async function fetchFromApi(): Promise<InstagramPost[]> {
   return posts;
 }
 
+function isValidUrl(url: string): boolean {
+  try {
+    new URL(url);
+    return !url.includes("[PLACEHOLDER");
+  } catch {
+    return false;
+  }
+}
+
 async function fetchFromSupabase(): Promise<InstagramPost[]> {
   try {
     const supabase = getSupabaseClient();
@@ -57,16 +66,21 @@ async function fetchFromSupabase(): Promise<InstagramPost[]> {
       .order("order_index", { ascending: true });
 
     if (data && data.length > 0) {
-      return data.map((p) => ({
-        id: p.id,
-        imageUrl: p.image_url,
-        caption: p.caption ?? "",
-        permalink: p.permalink,
-        source: "mock" as const,
-      }));
+      const valid = data
+        .filter((p) => isValidUrl(p.image_url))
+        .map((p) => ({
+          id: p.id,
+          imageUrl: p.image_url,
+          caption: p.caption ?? "",
+          permalink: p.permalink,
+          source: "mock" as const,
+        }));
+      if (valid.length > 0) return valid;
     }
-  } catch {
-    /* fallback silencioso */
+  } catch (err) {
+    if (process.env.NODE_ENV === "development") {
+      console.warn("[instagram] Supabase mock fetch failed:", err);
+    }
   }
   return fetchFromConfig();
 }
@@ -96,6 +110,5 @@ export async function fetchInstagramFeed(): Promise<InstagramPost[]> {
   const fromConfig = fetchFromConfig();
   if (fromConfig.length > 0) return fromConfig;
 
-  // último fallback: se tudo vazio, retorna array vazio
   return [];
 }

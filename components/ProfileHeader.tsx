@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function ProfileHeader({
   avatar,
   name,
@@ -17,9 +19,12 @@ export default function ProfileHeader({
   return (
     <div className="flex flex-col items-center gap-4 text-center">
       {avatar ? (
-        <img
+        <Image
           src={avatar}
           alt={name}
+          width={96}
+          height={96}
+          priority
           className="w-24 h-24 rounded-full object-cover ring-2 ring-blue-400/50"
         />
       ) : (
