@@ -9,11 +9,11 @@ export default function StatCard({
 }) {
   return (
     <div
-      className={`flex flex-col gap-1 p-4 rounded-xl border ${
+      className={`${
         highlight
           ? "bg-primary/10 border-primary/30"
           : "bg-secondary border-border"
-      }`}
+      } flex flex-col gap-1 p-4 rounded-xl border`}
     >
       <span className="text-2xl font-bold text-foreground">{value}</span>
       <span className="text-xs text-muted-foreground uppercase tracking-wider">

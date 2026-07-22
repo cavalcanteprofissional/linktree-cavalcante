@@ -1,12 +1,16 @@
 # 🌐 LinkTree Cavalcante
 
-Uma landing page pessoal estilo Linktree — moderna, mobile-first e com superpoderes:
+Uma landing page pessoal estilo Linktree — moderna, mobile-first, dark mode e com superpoderes:
 
 - 🔗 **Links personalizados** organizados em um único lugar
 - ✂️ **Encurtador de URL no domínio próprio** (`link.seudominio.com/abc123`)
 - 📸 **Feed do Instagram dinâmico** (com fallback quando a API falha)
 - 📊 **Analytics de cliques** (opcional, sem depender de serviços externos)
-- 📈 **Dashboard visual** em `/dashboard` com gráficos Recharts (opcional, com senha ou aberto)
+- 📈 **Dashboard visual** em `/dashboard` com gráficos Recharts, animações por seção com scroll (IntersectionObserver) (opcional, com senha ou aberto)
+- 💡 **Efeito CRT power-on** ao carregar a página (uma vez por sessão)
+- 🔘 **Bordas neon glow** em botões e avatar com intensificação no hover
+- 🔗 **Ícones de redes sociais** circulares com neon glow
+- 📍 **Card de localização** com mapa OpenStreetMap embutido
 
 ---
 
@@ -35,11 +39,14 @@ Uma landing page pessoal estilo Linktree — moderna, mobile-first e com superpo
 │   ├── [shortcode]/        # Encurtador de URL
 │   └── api/                # API routes (analytics, instagram, dashboard)
 ├── components/             # Componentes reutilizáveis
-│   ├── ProfileHeader.tsx   # Avatar + bio
-│   ├── LinkButton.tsx      # Botão de link
-│   ├── InstagramFeed.tsx   # Grid de posts do Instagram
+│   ├── ProfileHeader.tsx   # Avatar + bio (linkável ao GitHub com neon glow)
+│   ├── LinkButton.tsx      # Botão de link com neon glow no hover
+│   ├── SocialIcons.tsx     # LinkedIn, GitHub, Instagram, WhatsApp (círculos neon)
+│   ├── InstagramFeed.tsx   # Grid de posts do Instagram com stagger animation
+│   ├── LocationCard.tsx    # Endereço + mapa OpenStreetMap
+│   ├── CrtOverlay.tsx      # Efeito CRT power-on (1x por sessão)
 │   ├── Footer.tsx          # Footer com assinatura
-│   └── dashboard/          # Componentes do dashboard (Recharts)
+│   └── dashboard/          # Componentes do dashboard (Recharts + AnimatedSection)
 ├── config/                 # Configurações e conteúdo
 │   ├── links.config.ts     # Lista de links do perfil
 │   ├── instagram-mock.config.ts  # Posts mockados (fallback)
@@ -155,6 +162,18 @@ O dashboard fica em `/dashboard` com gráficos de cliques por dia, por link, top
 # Com senha — adicione no .env.local:
 DASHBOARD_PASSWORD=sua_senha
 ```
+
+### Funcionalidades visuais
+
+| Componente | Descrição |
+|---|---|
+| **CRT Overlay** | Efeito power-on com flash, scanlines e wobble — executa apenas uma vez por sessão (`sessionStorage`) |
+| **Neon Glow** | `box-shadow` multi-camada em botões, avatar e ícones sociais; intensifica no hover |
+| **Avatar** | Link direto ao GitHub com overlay do ícone GitHub no hover |
+| **Social Icons** | Ícones circulares (LinkedIn, GitHub, Instagram, WhatsApp) com neon glow |
+| **Instagram Feed** | Grid 3 colunas com stagger `fadeInUp` |
+| **Location Card** | Endereço + iframe OpenStreetMap + link Google Maps |
+| **Dashboard Scroll** | Seções do dashboard animam em sequência (top→bottom) com IntersectionObserver; gráficos Recharts re-triggeram ao scrollar |
 
 ---
 

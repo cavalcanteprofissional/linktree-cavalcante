@@ -11,8 +11,10 @@ import {
 
 export default function LinksChart({
   data,
+  visible = true,
 }: {
   data: { label: string; total: number }[];
+  visible?: boolean;
 }) {
   if (data.length === 0) {
     return (
@@ -25,7 +27,7 @@ export default function LinksChart({
   return (
     <div className="h-64">
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data} layout="vertical">
+        <BarChart data={data} layout="vertical" key={visible ? "visible" : "hidden"}>
           <XAxis type="number" hide />
           <YAxis
             type="category"
@@ -49,6 +51,8 @@ export default function LinksChart({
             fill="hsl(212, 75%, 55%)"
             radius={[0, 4, 4, 0]}
             barSize={20}
+            animationDuration={1500}
+            animationEasing="ease-out"
           />
         </BarChart>
       </ResponsiveContainer>

@@ -12,8 +12,10 @@ import {
 
 export default function ClicksChart({
   data,
+  visible = true,
 }: {
   data: { date: string; total: number }[];
+  visible?: boolean;
 }) {
   if (data.length === 0) {
     return (
@@ -26,7 +28,7 @@ export default function ClicksChart({
   return (
     <div className="h-64">
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data}>
+        <LineChart data={data} key={visible ? "visible" : "hidden"}>
           <CartesianGrid strokeDasharray="3 3" stroke="hsl(215, 30%, 18%)" />
           <XAxis
             dataKey="date"
@@ -56,6 +58,8 @@ export default function ClicksChart({
             strokeWidth={2}
             dot={false}
             activeDot={{ r: 4, fill: "hsl(212, 75%, 55%)" }}
+            animationDuration={2000}
+            animationEasing="ease-out"
           />
         </LineChart>
       </ResponsiveContainer>

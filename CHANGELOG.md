@@ -7,6 +7,50 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+---
+
+## [0.11.0] — 2026-07-22
+
+### Adicionado
+
+- **AnimatedSection** (`components/dashboard/AnimatedSection.tsx`) — fadeInUp com IntersectionObserver, delay sequencial e callback `onVisible` para re-trigger de animações
+- **Dashboard scroll animations** — cada seção do dashboard anima em sequência (100, 300, 500, 700, 900ms); seções abaixo da dobra só disparam via scroll
+- **Analytics badge no avatar** — botão redondo com ícone `bar-chart` posicionado a 45° (1:30) na borda da foto, neon glow, hover idêntico aos sociais, link `/dashboard`
+- **Ícone `bar-chart` e `globe`** em `lib/icons.ts`
+- **Portfólio e Lattes** nos SocialIcons com ícones `globe` e `book-open`
+
+### Alterado
+
+- **SocialIcons.tsx** — WhatsApp corrigido de `message-circle` para `whatsapp`; adicionados Portfólio e Lattes
+- **page.tsx** — SocialIcons movido para depois de LocationCard; link "📊 Analytics" removido (agora no avatar)
+- **ProfileHeader.tsx** — `"use client"`; avatar envolto em `<a>` ao GitHub com neon glow + overlay GitHub no hover; `object-[center_55%]`; bio `whitespace-nowrap`; Analytics badge com `key` re-trigger
+- **Footer.tsx** — "Todos os direitos reservados" quebra via `<br class="hidden sm:block" />`
+- **ClicksChart.tsx** — `animationDuration` 2000ms; `key` re-renderiza gráfico quando `visible` muda
+- **LinksChart.tsx** — `animationDuration` 1500ms; `key` re-renderiza gráfico quando `visible` muda
+- **StatCard.tsx** — removido `animate-fade-in-up` (AnimatedSection gerencia)
+- **dashboard/page.tsx** — seções envolvidas em AnimatedSection com delays + `observeVisibility` + `onVisible`
+
+## [0.10.0] — 2026-07-22
+
+### Adicionado
+
+- **CRT power-on effect** (`CrtOverlay.tsx`) — flash branco + scanlines + wobble, reproduz uma vez por sessão via `sessionStorage`
+- **Neon glow** nos botões (`LinkButton.tsx`) — `box-shadow` multi-camada hsla(212, 75%, 55%) que intensifica no hover
+- **Social Icons** (`SocialIcons.tsx`) — LinkedIn, GitHub, Instagram, WhatsApp em círculos com neon glow no hover
+- **Location Card** (`LocationCard.tsx`) — endereço + iframe OpenStreetMap com filtro modo escuro + link Google Maps
+- **Animação Instagram Feed** (`InstagramFeed.tsx`) — stagger `fadeInUp` com `animationDelay: i * 80ms`
+- **Dashboard animações** — `ClicksChart.tsx` (animationDuration 1500, ease-out), `LinksChart.tsx` (animationDuration 1000, ease-out), `StatCard.tsx` (fadeInUp)
+- **Avatar linkável para GitHub** (`ProfileHeader.tsx`) — foto envolta em `<a>` com neon glow + overlay com ícone GitHub no hover
+- **Animações globais** (`globals.css`) — @keyframes CRT flash, scanlines, wobble, fadeInUp, fadeIn
+
+### Alterado
+
+- **page.tsx** — `SocialIcons` posicionado após `LocationCard` (antes do Analytics); `LocationCard` adicionado após InstagramFeed
+- **layout.tsx** — `<CrtOverlay />` incluído no body
+- **ProfileHeader.tsx** — `"use client"` para eventos hover; `object-[center_55%]` para centralizar rosto no círculo; bio com `whitespace-nowrap` + `text-xs sm:text-sm` para manter em uma linha
+- **Footer.tsx** — "Todos os direitos reservados" quebra para nova linha em desktop via `<br class="hidden sm:block" />`
+- **InstagramFeed.tsx** — adicionado `unoptimized` no `<Image>` para compatibilidade com placehold.co (SVG)
+
 ## [0.9.0] — 2026-07-22
 
 ### Adicionado

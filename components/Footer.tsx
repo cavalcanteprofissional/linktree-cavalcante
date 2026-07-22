@@ -4,9 +4,10 @@ export default function Footer() {
   return (
     <footer className="w-full mt-12 pt-8 pb-6 border-t border-white/5">
       <div className="max-w-md mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-        <p>
-          &copy; {new Date().getFullYear()} Lucas Cavalcante. Todos os direitos
-          reservados.
+        <p className="text-center sm:text-left">
+          &copy; {new Date().getFullYear()} Lucas Cavalcante.
+          <br className="hidden sm:block" />
+          Todos os direitos reservados.
         </p>
         <a
           href="https://github.com/cavalcanteprofissional"

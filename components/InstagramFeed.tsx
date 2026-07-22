@@ -7,6 +7,7 @@ import type { InstagramPost } from "@/lib/instagram";
 export default function InstagramFeed() {
   const [posts, setPosts] = useState<InstagramPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     fetch("/api/instagram")
@@ -18,6 +19,13 @@ export default function InstagramFeed() {
       })
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      const timer = setTimeout(() => setVisible(true), 50);
+      return () => clearTimeout(timer);
+    }
+  }, [loading]);
 
   if (loading) {
     return (
@@ -45,19 +53,24 @@ export default function InstagramFeed() {
           Instagram
         </h2>
         <div className="grid grid-cols-3 gap-1">
-          {posts.map((post) => (
+          {posts.map((post, i) => (
             <a
               key={post.id}
               href={post.permalink}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative aspect-square overflow-hidden rounded-sm bg-secondary"
+              className="group relative aspect-square overflow-hidden rounded-sm bg-secondary animate-fade-in-up"
+              style={{
+                animationDelay: visible ? `${i * 80}ms` : "0ms",
+                opacity: visible ? undefined : 0,
+              }}
           >
             <Image
               src={post.imageUrl}
               alt={post.caption || "Post do Instagram"}
               width={400}
               height={400}
+              unoptimized
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
             {post.caption && (

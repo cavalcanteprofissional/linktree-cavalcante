@@ -1,6 +1,8 @@
 import ProfileHeader from "@/components/ProfileHeader";
 import LinkButton from "@/components/LinkButton";
+import SocialIcons from "@/components/SocialIcons";
 import InstagramFeed from "@/components/InstagramFeed";
+import LocationCard from "@/components/LocationCard";
 import { links } from "@/config/links.config";
 
 export default function Home() {
@@ -23,12 +25,8 @@ export default function Home() {
           ))}
         </div>
         <InstagramFeed />
-        <a
-          href="/dashboard"
-          className="text-xs text-muted-foreground hover:text-primary transition-colors mt-2"
-        >
-          📊 Analytics
-        </a>
+        <LocationCard />
+        <SocialIcons />
       </main>
     </div>
   );

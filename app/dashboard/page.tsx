@@ -7,6 +7,7 @@ import ClicksChart from "@/components/dashboard/ClicksChart";
 import LinksChart from "@/components/dashboard/LinksChart";
 import ReferrersTable from "@/components/dashboard/ReferrersTable";
 import RecentClicks from "@/components/dashboard/RecentClicks";
+import AnimatedSection from "@/components/dashboard/AnimatedSection";
 import type { DashboardStats } from "@/lib/dashboard-api";
 
 export default function DashboardPage() {
@@ -19,6 +20,9 @@ export default function DashboardPage() {
   const [linksData, setLinksData] = useState<{ label: string; total: number }[]>([]);
   const [referrers, setReferrers] = useState<{ referrer: string; total: number }[]>([]);
   const [recent, setRecent] = useState<{ label: string | null; clicked_at: string; referrer: string | null }[]>([]);
+
+  const [chartVisible, setChartVisible] = useState(false);
+  const [linksVisible, setLinksVisible] = useState(false);
 
   async function checkAuth() {
     try {
@@ -84,46 +88,67 @@ export default function DashboardPage() {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-8 space-y-8">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <StatCard label="Hoje" value={stats?.today ?? 0} />
-          <StatCard label="Últimos 7 dias" value={stats?.last7 ?? 0} />
-          <StatCard label="Total" value={stats?.total ?? 0} />
-          <StatCard
-            label="Top link"
-            value={stats?.topLink?.label ?? "—"}
-            highlight
-          />
-        </div>
+        <AnimatedSection delay={100}>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <StatCard label="Hoje" value={stats?.today ?? 0} />
+            <StatCard label="Últimos 7 dias" value={stats?.last7 ?? 0} />
+            <StatCard label="Total" value={stats?.total ?? 0} />
+            <StatCard
+              label="Top link"
+              value={stats?.topLink?.label ?? "—"}
+              highlight
+            />
+          </div>
+        </AnimatedSection>
 
-        <section className="bg-secondary/50 rounded-xl p-4 sm:p-6 border border-border">
-          <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
-            Cliques por dia (últimos 30 dias)
-          </h2>
-          <ClicksChart data={clicksOverTime} />
-        </section>
+        <AnimatedSection
+          delay={300}
+          observeVisibility
+          onVisible={() => setChartVisible(true)}
+        >
+          <section className="bg-secondary/50 rounded-xl p-4 sm:p-6 border border-border">
+            <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
+              Cliques por dia (últimos 30 dias)
+            </h2>
+            <ClicksChart data={clicksOverTime} visible={chartVisible} />
+          </section>
+        </AnimatedSection>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <section className="bg-secondary/50 rounded-xl p-4 sm:p-6 border border-border">
-            <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
-              Cliques por link
-            </h2>
-            <LinksChart data={linksData} />
-          </section>
+          <AnimatedSection
+            delay={500}
+            observeVisibility
+            onVisible={() => setLinksVisible(true)}
+          >
+            <section className="bg-secondary/50 rounded-xl p-4 sm:p-6 border border-border h-full">
+              <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
+                Cliques por link
+              </h2>
+              <LinksChart data={linksData} visible={linksVisible} />
+            </section>
+          </AnimatedSection>
 
-          <section className="bg-secondary/50 rounded-xl p-4 sm:p-6 border border-border">
-            <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
-              Top referrers
-            </h2>
-            <ReferrersTable data={referrers} />
-          </section>
+          <AnimatedSection
+            delay={700}
+            observeVisibility
+          >
+            <section className="bg-secondary/50 rounded-xl p-4 sm:p-6 border border-border h-full">
+              <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
+                Top referrers
+              </h2>
+              <ReferrersTable data={referrers} />
+            </section>
+          </AnimatedSection>
         </div>
 
-        <section className="bg-secondary/50 rounded-xl p-4 sm:p-6 border border-border">
-          <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
-            Últimos cliques
-          </h2>
-          <RecentClicks data={recent} />
-        </section>
+        <AnimatedSection delay={900} observeVisibility>
+          <section className="bg-secondary/50 rounded-xl p-4 sm:p-6 border border-border">
+            <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
+              Últimos cliques
+            </h2>
+            <RecentClicks data={recent} />
+          </section>
+        </AnimatedSection>
       </main>
     </div>
   );
