@@ -50,7 +50,7 @@ export default function ProfileHeader({
               width={96}
               height={96}
               priority
-              className="w-24 h-24 rounded-full object-cover object-[center_55%] ring-2 ring-blue-400/50"
+              className="w-24 h-24 rounded-full object-cover object-[center_35%] ring-2 ring-blue-400/50"
             />
             <div className="absolute inset-0 rounded-full bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center">
               <svg

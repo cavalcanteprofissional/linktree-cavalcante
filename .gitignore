@@ -40,8 +40,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# docs (referência externa, não parte do código)
-/docs/
-
 # experimentos abandonados
 /components/WaterBackground/

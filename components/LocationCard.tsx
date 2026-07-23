@@ -33,7 +33,7 @@ export default function LocationCard() {
         <img
           src="/images/map.svg"
           alt="Mapa de Fortaleza"
-          className="w-full h-full block select-none pointer-events-none object-cover object-top"
+          className="w-full h-full block select-none pointer-events-none object-cover object-[center_90%]"
           loading="lazy"
         />
       </div>
