@@ -1,5 +1,9 @@
 # 🌐 LinkTree Cavalcante
 
+<p align="center">
+  <img src="/images/thumbnail.png" alt="LinkTree Cavalcante preview" width="800" />
+</p>
+
 Uma landing page pessoal estilo Linktree — moderna, mobile-first, dark mode e com superpoderes:
 
 - 🔗 **Projetos dinâmicos do portfólio** — 5 projetos buscados via API com fallback, seletor PT/EN/ES e modal com detalhes
@@ -52,6 +56,7 @@ Uma landing page pessoal estilo Linktree — moderna, mobile-first, dark mode e 
 │   ├── ProjectLinks.tsx    # Botões de projetos com seletor PT/EN/ES
 │   ├── ProjectModal.tsx    # Modal de projeto (backdrop + tech tags + Demo/Código)
 │   └── dashboard/          # Componentes do dashboard (Recharts + AnimatedSection)
+├── app/api/projects/       # API de projetos do portfólio (ISR 30min)
 ├── config/                 # Configurações e conteúdo
 │   ├── links.config.ts     # Lista de links do perfil
 │   ├── instagram-mock.config.ts  # Posts mockados (fallback)
@@ -72,9 +77,8 @@ Uma landing page pessoal estilo Linktree — moderna, mobile-first, dark mode e 
 │   └── seed.sql            # Dados de exemplo
 ├── scripts/                # Utilitários
 │   └── analytics_pipeline.py  # Pipeline de agregação (Python)
-├── public/images/          # Imagens locais (avatar, assinatura)
+├── public/images/          # Imagens locais (avatar, assinatura, thumbnail)
 ├── docs/                   # Documentação de referência
-├── SKILL.md                # Instruções técnicas detalhadas
 ├── CONTENT.md              # Conteúdo real (preencha aqui!)
 ├── CHANGELOG.md            # Histórico de versões
 ├── TODO.md                 # Próximos passos
@@ -175,12 +179,13 @@ DASHBOARD_PASSWORD=sua_senha
 
 | Componente | Descrição |
 |---|---|
-| **CRT Overlay** | Efeito power-on com flash, scanlines e wobble — executa apenas uma vez por sessão (`sessionStorage`) |
+| **AnimatedSection** | Fade-in + slide-up com delay configurável, usado nas seções da página principal |
 | **Neon Glow** | `box-shadow` multi-camada em botões, avatar e ícones sociais; intensifica no hover |
 | **Mouse Glow** | Glow azul Corporate Blue no background que segue o cursor com suavização (lerp + RAF) |
 | **Tilt 3D + Ripple** | Container com `perspective(800px)` e rotação baseada na posição do mouse; ripple expansivo no clique |
 | **Avatar** | Link direto ao GitHub com overlay do ícone GitHub no hover |
 | **Social Icons** | Ícones circulares (LinkedIn, GitHub, Instagram, WhatsApp, Portfólio, Lattes) com neon glow |
+| **Animações de entrada** | Cada seção da página principal anima em sequência (fade-in + slide-up, 100–500ms delay) |
 | **Project Links** | 5 projetos dinâmicos com seletor PT/EN/ES, skeleton loading, modal com Demo + Código |
 | **Instagram Feed** | Grid 3 colunas com stagger `fadeInUp` |
 | **Location Card** | Endereço + mapa SVG blueprint (Terraink) + link Google Maps |
