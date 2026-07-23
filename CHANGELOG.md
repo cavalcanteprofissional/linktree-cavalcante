@@ -9,6 +9,102 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [0.15.0] — 2026-07-23
+
+### Adicionado
+
+- **Mouse glow no background** (`components/PoolEffect.tsx`) — glow azul Corporate Blue (300px, blur 25px) que segue o cursor com suavização (lerp 0.08 via RAF), substitui o antigo PoolEffect com 4 divs animadas
+- **Projetos dinâmicos do portfólio** — 5 botões com fetch via `/api/projects` do GitHub raw, fallback mockado local, seletor de idioma PT/EN/ES com persistência em localStorage
+- **Modal de projetos** (`components/ProjectModal.tsx`) — backdrop escuro, badge de status (concluído/andamento), tech tags, botões Demo + Código, fechamento via Escape ou clique no backdrop
+- **Status de projetos** — dot verde (concluído) / amarelo (andamento) nos botões e badge no modal, com tradução PT/EN/ES
+- **Mapa SVG via Terraink** — `public/images/map.svg` substitui iframe OSM no LocationCard
+- **MouseInteraction** (`components/MouseInteraction.tsx`) — tilt 3D ±12° com `perspective(800px)` + ripple expansivo no clique, suporte touch
+- **Todas as tentativas do PoolEffect**: divs drifting (24.5), SVG filter caustics (24.6), divs com mix-blend-mode (24.7), R3F WaterBackground com shader GLSL (25)
+- **Ícones para projetos** — 14 novos paths SVG em `lib/icons.ts` (testtube, chart-line, robot, eye, brain, pie-chart, help-circle, newspaper, scan-search, shopping-cart, message-circle-question, etc.)
+- `config/projects-mock.config.ts` — 5 projetos de fallback
+- `config/projects-translations.ts` — 16 projetos × 3 idiomas
+- `lib/projects.ts` — `fetchProjects(lang)`, `getStatusLabel()`, interfaces tipadas
+- `app/api/projects/route.ts` — Route Handler com ISR 1800s
+- `docs/PROJECTS-API.md`, `docs/PORTFOLIO-LOCATION-SECTION.md`
+- `public/images/map.svg` — mapa blueprint de Fortaleza (32MB)
+
+### Alterado
+
+- `components/PoolEffect.tsx` — completamente refeito: de 4 divs com mix-blend-mode para glow único mouse-following com RAF + lerp
+- `components/LocationCard.tsx` — iframe OSM substituído por `<img src="/images/map.svg">`; layout redesenhado
+- `components/ProfileHeader.tsx` — Analytics badge elevado para `hover:bg-primary/40` para compensar overlay avatar
+- `app/page.tsx` — `<ProjectLinks />` substitui links sociais; `<SocialIcons />` reposicionado; `<PoolEffect />` mantido como glow
+- `lib/icons.ts` — 14 novos ícones + `bar-chart` + `globe`
+- `app/globals.css` — keyframes `water-1..4` adicionados/removidos conforme iterações do PoolEffect; `@keyframes ripple-expand` mantido
+- `.gitignore` — `/docs/` e `/components/WaterBackground/` adicionados
+
+### Corrigido
+
+- **Hydration mismatch no WaterBackground** (R3F) — `typeof window` no server vs client causava mismatch; substituído por `useState` + `useEffect`
+- **Modal backdrop não cobria tela toda** — `ProjectModal` dentro do `MouseInteraction` com `transform` fazia `fixed` referenciar o container transformado; fix com `createPortal` para `document.body`
+- **Footer coberto pelo Canvas** — z-index do WaterBackground (`z-0`) sobrepunha footer em fluxo normal; corrigido com `-z-10`
+- **Ripple no clique conflitava com interação** — removido click listener do WaterBackground; mantido apenas mouse move para distorção
+
+### Removido
+
+- `components/WaterBackground/` — experimento R3F removido, volta ao PoolEffect CSS
+- Keyframes `water-1..4`, `pool-drift-*` de `app/globals.css` (durante iterações, restaurados na versão final)
+
+---
+
+## [0.14.0] — 2026-07-22
+
+### Adicionado
+
+- **Mapa SVG via Terraink** — `public/images/map.svg` (32 MB, blueprint style de Fortaleza) substitui iframe OSM
+- **LocationCard redesenhado** — SVG full‑width no topo com `aspect-ratio: 1/1`; conteúdo (badge, título, bio, Maps) posicionado abaixo, sem sobreposição
+
+### Alterado
+
+- `components/LocationCard.tsx`: iframe OSM substituído por `<img src="/images/map.svg">`; layout p-4 com textos abaixo do mapa; estilos adaptados para border-border / text-foreground / text-muted-foreground
+
+---
+
+## [0.13.0] — 2026-07-22
+
+### Adicionado
+
+- **Status dos projetos** — dot verde (concluído) ou amarelo (andamento) nos botões e badge no modal
+- **`getStatusLabel()`** em `lib/projects.ts` — tradução PT/EN/ES para `concluido` e `andamento`
+- **`status` field** nos mocks de `config/projects-mock.config.ts`
+
+### Alterado
+
+- `components/ProjectLinks.tsx`: dot colorido no canto direito de cada botão, `lang` passado ao `ProjectModal`
+- `components/ProjectModal.tsx`: badge status com dot + label traduzido no header, integrado via `getStatusLabel()`
+- `app/api/projects/route.ts`: `status: p.status` adicionado no `.map()` da resposta
+
+---
+
+## [0.12.0] — 2026-07-22
+
+### Adicionado
+
+- **Projetos dinâmicos** — 5 botões substituem os 5 links sociais estáticos, puxados do portfolio `projects.json` via `raw.githubusercontent.com`
+- **API `/api/projects`** — Route Handler com ISR `revalidate: 1800` (30 min cache), ordena por id desc, retorna top 5
+- **`lib/projects.ts`** — `fetchProjects(lang)`: tenta API → resolve traduções PT/EN/ES → fallback mock
+- **`config/projects-translations.ts`** — 16 projetos × 3 idiomas (PT, EN, ES)
+- **`config/projects-mock.config.ts`** — 5 projetos estáticos de fallback (ids 15, 14, 13, 12, 11)
+- **`components/ProjectModal.tsx`** — modal glass com backdrop, título, descrição, tech tags, Demo + Code buttons
+- **`components/ProjectLinks.tsx`** — seletor de idioma (PT/EN/ES) com persistência em localStorage, 5 skeletons, fetch, toggle
+- **14 paths de ícones** em `lib/icons.ts` para todos os projetos do portfolio
+- **LocalizationCard redesenhado** — mapa OSM h-72 com overlay glass card no rodapé, badge com dot pulsante, título com destaque no estado, divisor, bio, botão Maps, animação pulse
+- **`docs/PORTFOLIO-LOCATION-SECTION.md`** — especificação para adicionar seção de localização similar no portfolio
+- **Ícone `map-pin`** em `lib/icons.ts`
+
+### Alterado
+
+- `app/page.tsx`: `<ProjectLinks />` substitui `{links.map(...)}` dos 5 botões sociais; `<SocialIcons />` após `<LocationCard />`
+- `docs/PROJECTS-API.md`: especificação da API de projetos do portfolio
+- `config/links.config.ts`: agora contém apenas Instagram (dados do shortener) — os 5 links sociais foram removidos
+
+---
+
 ## [0.11.0] — 2026-07-22
 
 ### Adicionado

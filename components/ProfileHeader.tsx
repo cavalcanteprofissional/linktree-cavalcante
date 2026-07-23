@@ -66,7 +66,7 @@ export default function ProfileHeader({
           <a
             href="/dashboard"
             aria-label="Analytics"
-            className="absolute left-[68px] -top-1 z-10 w-7 h-7 rounded-full bg-secondary border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/20 hover:scale-110 cursor-pointer transition-all duration-200"
+            className="absolute left-[66px] -top-2 z-10 w-8 h-8 rounded-full bg-secondary border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/40 hover:scale-110 cursor-pointer transition-all duration-200 pointer-events-auto"
             style={{
               boxShadow:
                 "0 0 4px hsla(212, 75%, 55%, 0.3), 0 0 8px hsla(212, 75%, 55%, 0.15)",
@@ -87,7 +87,7 @@ export default function ProfileHeader({
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="w-3.5 h-3.5"
+              className="w-4 h-4"
               aria-hidden="true"
             >
               <path d={icons["bar-chart"] ?? icons.link} />

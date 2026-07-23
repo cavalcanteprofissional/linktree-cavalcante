@@ -2,7 +2,7 @@
 
 Uma landing page pessoal estilo Linktree — moderna, mobile-first, dark mode e com superpoderes:
 
-- 🔗 **Links personalizados** organizados em um único lugar
+- 🔗 **Projetos dinâmicos do portfólio** — 5 projetos buscados via API com fallback, seletor PT/EN/ES e modal com detalhes
 - ✂️ **Encurtador de URL no domínio próprio** (`link.seudominio.com/abc123`)
 - 📸 **Feed do Instagram dinâmico** (com fallback quando a API falha)
 - 📊 **Analytics de cliques** (opcional, sem depender de serviços externos)
@@ -10,7 +10,9 @@ Uma landing page pessoal estilo Linktree — moderna, mobile-first, dark mode e 
 - 💡 **Efeito CRT power-on** ao carregar a página (uma vez por sessão)
 - 🔘 **Bordas neon glow** em botões e avatar com intensificação no hover
 - 🔗 **Ícones de redes sociais** circulares com neon glow
-- 📍 **Card de localização** com mapa OpenStreetMap embutido
+- 🖱️ **Glow interativo no background** — brilho azul que acompanha o movimento do mouse com suavização
+- 📍 **Card de localização** com mapa SVG blueprint (Terraink) + link Google Maps
+- 🌀 **Efeito tilt 3D + ripple** no container principal ao mover/clicar
 
 ---
 
@@ -43,19 +45,26 @@ Uma landing page pessoal estilo Linktree — moderna, mobile-first, dark mode e 
 │   ├── LinkButton.tsx      # Botão de link com neon glow no hover
 │   ├── SocialIcons.tsx     # LinkedIn, GitHub, Instagram, WhatsApp (círculos neon)
 │   ├── InstagramFeed.tsx   # Grid de posts do Instagram com stagger animation
-│   ├── LocationCard.tsx    # Endereço + mapa OpenStreetMap
+│   ├── LocationCard.tsx    # Endereço + mapa SVG blueprint
 │   ├── CrtOverlay.tsx      # Efeito CRT power-on (1x por sessão)
 │   ├── Footer.tsx          # Footer com assinatura
+│   ├── PoolEffect.tsx      # Glow background que segue o mouse
+│   ├── MouseInteraction.tsx # Tilt 3D + ripple no clique
+│   ├── ProjectLinks.tsx    # Botões de projetos com seletor PT/EN/ES
+│   ├── ProjectModal.tsx    # Modal de projeto (backdrop + tech tags + Demo/Código)
 │   └── dashboard/          # Componentes do dashboard (Recharts + AnimatedSection)
 ├── config/                 # Configurações e conteúdo
 │   ├── links.config.ts     # Lista de links do perfil
 │   ├── instagram-mock.config.ts  # Posts mockados (fallback)
-│   └── shortener-static.config.ts # Shortcodes estáticos
+│   ├── shortener-static.config.ts # Shortcodes estáticos
+│   ├── projects-mock.config.ts    # Projetos mockados (fallback)
+│   └── projects-translations.ts    # Traduções PT/EN/ES dos projetos
 ├── lib/                    # Lógica de negócio
 │   ├── supabase.ts         # Cliente Supabase (server-side)
 │   ├── instagram.ts        # Wrapper da API do Instagram
 │   ├── shortener.ts        # Resolução de short codes
-│   ├── icons.ts            # SVGs dos ícones
+│   ├── icons.ts            # SVGs dos ícones (~30 paths)
+│   ├── projects.ts         # Fetch projetos + traduções
 │   ├── dashboard-api.ts    # Queries do dashboard
 │   └── dashboard-auth.ts   # Autenticação do dashboard
 ├── supabase/               # Scripts SQL do banco
@@ -169,10 +178,13 @@ DASHBOARD_PASSWORD=sua_senha
 |---|---|
 | **CRT Overlay** | Efeito power-on com flash, scanlines e wobble — executa apenas uma vez por sessão (`sessionStorage`) |
 | **Neon Glow** | `box-shadow` multi-camada em botões, avatar e ícones sociais; intensifica no hover |
+| **Mouse Glow** | Glow azul Corporate Blue no background que segue o cursor com suavização (lerp + RAF) |
+| **Tilt 3D + Ripple** | Container com `perspective(800px)` e rotação baseada na posição do mouse; ripple expansivo no clique |
 | **Avatar** | Link direto ao GitHub com overlay do ícone GitHub no hover |
-| **Social Icons** | Ícones circulares (LinkedIn, GitHub, Instagram, WhatsApp) com neon glow |
+| **Social Icons** | Ícones circulares (LinkedIn, GitHub, Instagram, WhatsApp, Portfólio, Lattes) com neon glow |
+| **Project Links** | 5 projetos dinâmicos com seletor PT/EN/ES, skeleton loading, modal com Demo + Código |
 | **Instagram Feed** | Grid 3 colunas com stagger `fadeInUp` |
-| **Location Card** | Endereço + iframe OpenStreetMap + link Google Maps |
+| **Location Card** | Endereço + mapa SVG blueprint (Terraink) + link Google Maps |
 | **Dashboard Scroll** | Seções do dashboard animam em sequência (top→bottom) com IntersectionObserver; gráficos Recharts re-triggeram ao scrollar |
 
 ---
