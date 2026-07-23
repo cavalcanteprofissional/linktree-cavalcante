@@ -99,6 +99,38 @@ body {
   animation: crt-wobble 0.8s ease-out;
 }
 
+@keyframes crt-glitch {
+  0%, 85%, 100% { opacity: 0; }
+  86%, 88% { opacity: 1; transform: translate(1px, -1px); filter: hue-rotate(10deg); }
+  90%, 92% { opacity: 1; transform: translate(-1px, 1px); filter: hue-rotate(-10deg); }
+  94%, 96% { opacity: 1; transform: translate(2px, 0); filter: hue-rotate(5deg); }
+}
+
+@keyframes crt-flicker {
+  0%, 100% { opacity: 0; }
+  2%, 4% { opacity: 0.4; }
+  6%, 8% { opacity: 0; }
+  42% { opacity: 0; }
+  44% { opacity: 0.3; }
+  46% { opacity: 0; }
+}
+
+@keyframes crt-noise {
+  0%, 100% { opacity: 0; }
+  10%, 10.5% { opacity: 0.06; }
+  25%, 25.3% { opacity: 0.04; }
+  55%, 55.4% { opacity: 0.05; }
+  75%, 75.2% { opacity: 0.03; }
+}
+
+.animate-crt-glitch {
+  animation: crt-glitch 2s ease-out forwards;
+}
+
+.animate-crt-flicker {
+  animation: crt-flicker 1.5s ease-out forwards;
+}
+
 .animate-fade-in-up {
   animation: fadeInUp 0.4s ease-out both;
 }

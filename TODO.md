@@ -255,6 +255,25 @@ Substituir os 5 botões fixos (LinkedIn, GitHub, WhatsApp, Portfólio, Lattes) p
 
 ---
 
+---
+
+## ✅ Etapa 26: Boot Experience Imersiva (CRT + Boot Splash + Som)
+
+### 26.1 — CrtOverlay refeito
+- [x] `components/CrtOverlay.tsx`: boot splash escuro (`hsl(215,45%,8%)`) cobre a tela — igual ao `#boot-splash` do portfolio
+- [x] Conteúdo carrega atrás do overlay, revelado após fade-out (2.2s + 0.7s transition)
+- [x] Som de boot sintetizado via Web Audio API (hum 60Hz + flyback whine 12kHz + pop + noise burst)
+- [x] Glitch/flicker digitais nos primeiros 2s (glitch com hue-rotate, flicker com opacidade rápida)
+- [x] Sequência: dark screen → flash → scanlines + wobble → glitch/flicker → fade-out → conteúdo
+
+### 26.2 — Keyframes
+- [x] `app/globals.css`: `@keyframes crt-glitch`, `crt-flicker`, `.animate-crt-glitch`, `.animate-crt-flicker`
+
+### 26.3 — Build
+- [x] `npm run build` sem erros
+
+---
+
 ## 🔄 Pendente: Deploy Vercel
 
 1. Acesse https://vercel.com/login e faça login com GitHub
