@@ -152,7 +152,8 @@ Se for usar o feed real do Instagram:
 ### 4. Upstash Redis (analytics)
 
 O dashboard de analytics usa **Upstash Redis** via Vercel Marketplace.
-Na Vercel, vá em **Marketplace → Upstash Redis** e crie um banco (as env vars são injetadas automaticamente).
+Na Vercel, vá em **Marketplace → Upstash Redis** e crie um banco.
+As env vars `KV_REST_API_URL`, `KV_REST_API_TOKEN` e `KV_REST_API_READ_ONLY_TOKEN` são injetadas automaticamente.
 Localmente, o dashboard funciona sem Redis em modo fallback (dados zerados).
 
 ### 5. Dashboard Analytics (opcional)
