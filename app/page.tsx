@@ -5,7 +5,6 @@ import LocationCard from "@/components/LocationCard";
 import ProjectLinks from "@/components/ProjectLinks";
 import PoolEffect from "@/components/PoolEffect";
 import MouseInteraction from "@/components/MouseInteraction";
-import AnimatedSection from "@/components/dashboard/AnimatedSection";
 
 export default function Home() {
   return (
@@ -13,25 +12,15 @@ export default function Home() {
       <PoolEffect />
       <MouseInteraction>
         <main className="flex flex-col items-center w-full max-w-md gap-6 py-16 relative z-10">
-          <AnimatedSection delay={100}>
-            <ProfileHeader
-              name="Lucas Cavalcante"
-              bio="Analista de Dados | IA &amp; Machine Learning | Visão Computacional"
-              avatar="/images/foto-perfil.webp"
-            />
-          </AnimatedSection>
-          <AnimatedSection delay={250} observeVisibility>
-            <ProjectLinks />
-          </AnimatedSection>
-          <AnimatedSection delay={350} observeVisibility>
-            <InstagramFeed />
-          </AnimatedSection>
-          <AnimatedSection delay={450} observeVisibility>
-            <LocationCard />
-          </AnimatedSection>
-          <AnimatedSection delay={550} observeVisibility>
-            <SocialIcons />
-          </AnimatedSection>
+          <ProfileHeader
+            name="Lucas Cavalcante"
+            bio="Analista de Dados | IA &amp; Machine Learning | Visão Computacional"
+            avatar="/images/foto-perfil.webp"
+          />
+          <ProjectLinks />
+          <InstagramFeed />
+          <LocationCard />
+          <SocialIcons />
         </main>
       </MouseInteraction>
     </div>
