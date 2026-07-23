@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Footer from "@/components/Footer";
-import CrtOverlay from "@/components/CrtOverlay";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -58,7 +57,6 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
     >
       <body className="min-h-dvh flex flex-col bg-slate-900 text-slate-50">
-        <CrtOverlay />
         {children}
         <Footer />
       </body>
