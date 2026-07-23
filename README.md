@@ -26,11 +26,11 @@ Uma landing page pessoal estilo Linktree — moderna, mobile-first, dark mode e 
 |---|---|
 | Framework | Next.js 16 (App Router) |
 | Estilização | Tailwind v4 + Dark Mode |
-| Banco (opcional) | Supabase (Postgres) |
+| Analytics (opcional) | Vercel KV (Redis edge) |
 | Deploy | Vercel (free tier) |
 | Testes | Playwright |
 
-> O Supabase é **opcional** — o site funciona perfeitamente sem ele em modo fallback. Use-o apenas se quiser analytics de cliques e armazenamento de posts mockados do Instagram.
+> O analytics via Vercel KV é **opcional** — sem configurar, o site funciona normalmente com fallbacks estáticos.
 
 ---
 
@@ -64,19 +64,14 @@ Uma landing page pessoal estilo Linktree — moderna, mobile-first, dark mode e 
 │   ├── projects-mock.config.ts    # Projetos mockados (fallback)
 │   └── projects-translations.ts    # Traduções PT/EN/ES dos projetos
 ├── lib/                    # Lógica de negócio
-│   ├── supabase.ts         # Cliente Supabase (server-side)
+│   ├── kv.ts               # Cliente Vercel KV (Redis)
 │   ├── instagram.ts        # Wrapper da API do Instagram
 │   ├── shortener.ts        # Resolução de short codes
 │   ├── icons.ts            # SVGs dos ícones (~30 paths)
 │   ├── projects.ts         # Fetch projetos + traduções
 │   ├── dashboard-api.ts    # Queries do dashboard
 │   └── dashboard-auth.ts   # Autenticação do dashboard
-├── supabase/               # Scripts SQL do banco
-│   ├── schema.sql          # Criação das tabelas
-│   ├── rls.sql             # Políticas de segurança
-│   └── seed.sql            # Dados de exemplo
 ├── scripts/                # Utilitários
-│   └── analytics_pipeline.py  # Pipeline de agregação (Python)
 ├── public/images/          # Imagens locais (avatar, assinatura, thumbnail)
 ├── docs/                   # Documentação de referência
 ├── CONTENT.md              # Conteúdo real (preencha aqui!)
@@ -137,7 +132,7 @@ export const links = [
 
 ### 2. Variáveis de ambiente (opcional)
 
-Copie `.env.example` para `.env.local` e preencha se quiser usar Supabase e/ou Instagram real:
+Copie `.env.example` para `.env.local` e preencha se quiser usar Instagram real e/ou dashboard com senha:
 
 ```bash
 cp .env.example .env.local
@@ -145,14 +140,7 @@ cp .env.example .env.local
 
 Todas as variáveis são **opcionais** — o site funciona sem elas usando fallbacks.
 
-### 3. Banco de dados (opcional)
-
-Se for usar Supabase:
-1. Crie um projeto gratuito em [supabase.com](https://supabase.com)
-2. Rode os scripts na ordem: `schema.sql` → `rls.sql` → `seed.sql`
-3. Copie as credenciais para `.env.local`
-
-### 4. Instagram (opcional)
+### 3. Instagram (opcional)
 
 Se for usar o feed real do Instagram:
 1. Obtenha um token de acesso de longa duração da Meta Graph API
@@ -160,6 +148,12 @@ Se for usar o feed real do Instagram:
 3. Preencha `INSTAGRAM_ACCESS_TOKEN` e `INSTAGRAM_BUSINESS_ACCOUNT_ID` no `.env.local`
 
 > Sem token, o feed usa posts mockados definidos em `config/instagram-mock.config.ts`.
+
+### 4. Vercel KV (analytics em Redis)
+
+O dashboard de analytics usa **Vercel KV** (Redis) em vez de banco externo.
+Na Vercel, vá em **Storage → Create Database → KV** e as env vars são injetadas automaticamente.
+Localmente, o dashboard funciona sem KV em modo fallback (dados zerados).
 
 ### 5. Dashboard Analytics (opcional)
 
@@ -209,8 +203,9 @@ Os screenshots são salvos em `.validation/`.
 1. Faça o build local: `npm run build`
 2. Crie um repositório no GitHub e faça push
 3. Acesse [vercel.com](https://vercel.com) e importe o repositório
-4. Configure as variáveis de ambiente no painel da Vercel (Production + Preview)
-5. Pronto! Seu LinkTree está no ar 🎉
+4. Vá em **Storage → Create Database → KV** para criar o Redis (env vars injetadas automaticamente)
+5. Configure as demais variáveis de ambiente (Production + Preview) se necessário
+6. Pronto! Seu LinkTree está no ar 🎉
 
 ---
 

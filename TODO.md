@@ -277,13 +277,39 @@ Removido por solicitação do usuário. CrtOverlay deletado, CSS CRT limpo do gl
 
 ---
 
-## 🔄 Pendente: Deploy Vercel
+## ✅ Etapa 28: Migração Supabase → Vercel KV (Redis)
 
-1. Acesse https://vercel.com/login e faça login com GitHub
-2. **"Add New..." → "Project"** → importe `cavalcanteprofissional/linktree-cavalcante`
-3. Em **Environment Variables**, adicione:
-   - `SUPABASE_URL` = `https://ezcrzdbfdxchqpckrfan.supabase.co`
-   - `SUPABASE_SERVICE_ROLE_KEY` = (copiar do `.env.local`)
-   - `INSTAGRAM_ACCESS_TOKEN` = (copiar do `.env.local`)
-   - `INSTAGRAM_BUSINESS_ACCOUNT_ID` = `17841412670747535`
-4. **"Deploy"** e validar domínio
+### 28.1 — Dependências
+- [x] `npm uninstall @supabase/supabase-js && npm install @vercel/kv`
+
+### 28.2 — Cliente KV
+- [x] `lib/kv.ts`: export `getKV()` + `hasKV` flag (usa `@vercel/kv`)
+
+### 28.3 — Dashboard API
+- [x] `lib/dashboard-api.ts`: todas as queries substituídas por `KV.HGETALL`, `KV.HGET`, `KV.LRANGE`, `KV.INCR`
+- [x] Dados migrados para hashes Redis (`stats:daily`, `stats:total`, `stats:links`, `stats:referrers`) e list (`recent`)
+
+### 28.4 — Analytics endpoint
+- [x] `app/api/analytics/route.ts`: `HINCRBY` daily/link/referrer + `LPUSH` + `LTRIM` no lugar de insert Supabase
+
+### 28.5 — Limpeza
+- [x] `lib/supabase.ts` deletado
+- [x] `supabase/` deletado
+- [x] `scripts/analytics_pipeline.py` deletado
+- [x] `.env.example`: vars Supabase removidas, comentário sobre KV adicionado
+- [x] `lib/instagram.ts`: fallback Supabase removido (agora direto API → config)
+- [x] `lib/shortener.ts`: lookup Supabase removido (agora só config estático)
+
+### 28.6 — Build
+- [x] `npm run build` sem erros
+
+---
+
+## 🔄 Pendente: Configurar Vercel KV
+
+Após o deploy:
+1. Vercel Dashboard → **Storage** → **Create Database** → **KV**
+2. Escolher região (ex: `gru1` São Paulo)
+3. As env vars são injetadas automaticamente pela Vercel
+4. Fazer redeploy do projeto
+5. Opcional: configurar `DASHBOARD_PASSWORD`, `INSTAGRAM_ACCESS_TOKEN`, `INSTAGRAM_BUSINESS_ACCOUNT_ID` nas Environment Variables da Vercel

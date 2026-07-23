@@ -1,4 +1,3 @@
-import { hasSupabase, getSupabaseClient } from "./supabase";
 import { instagramMockPosts } from "@/config/instagram-mock.config";
 
 export interface InstagramPost {
@@ -47,44 +46,6 @@ async function fetchFromApi(): Promise<InstagramPost[]> {
   return posts;
 }
 
-function isValidUrl(url: string): boolean {
-  try {
-    new URL(url);
-    return !url.includes("[PLACEHOLDER");
-  } catch {
-    return false;
-  }
-}
-
-async function fetchFromSupabase(): Promise<InstagramPost[]> {
-  try {
-    const supabase = getSupabaseClient();
-    const { data } = await supabase
-      .from("instagram_posts_mock")
-      .select("id, image_url, caption, permalink")
-      .eq("active", true)
-      .order("order_index", { ascending: true });
-
-    if (data && data.length > 0) {
-      const valid = data
-        .filter((p) => isValidUrl(p.image_url))
-        .map((p) => ({
-          id: p.id,
-          imageUrl: p.image_url,
-          caption: p.caption ?? "",
-          permalink: p.permalink,
-          source: "mock" as const,
-        }));
-      if (valid.length > 0) return valid;
-    }
-  } catch (err) {
-    if (process.env.NODE_ENV === "development") {
-      console.warn("[instagram] Supabase mock fetch failed:", err);
-    }
-  }
-  return fetchFromConfig();
-}
-
 function fetchFromConfig(): InstagramPost[] {
   return instagramMockPosts.map((p) => ({ ...p, source: "mock" as const }));
 }
@@ -100,11 +61,6 @@ export async function fetchInstagramFeed(): Promise<InstagramPost[]> {
     } catch (err) {
       console.warn("[instagram] API failed, falling back:", err);
     }
-  }
-
-  if (hasSupabase) {
-    const fromDb = await fetchFromSupabase();
-    if (fromDb.length > 0) return fromDb;
   }
 
   const fromConfig = fetchFromConfig();

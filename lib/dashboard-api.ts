@@ -1,7 +1,4 @@
-import { hasSupabase, getSupabaseClient } from "./supabase";
-
-type DbLink = { id: string; short_code: string; destination_url: string; label: string | null };
-type DbClick = { id: string; link_id: string; clicked_at: string; referrer: string | null; user_agent: string | null };
+import { hasKV, getKV } from "./kv";
 
 export interface DashboardStats {
   today: number;
@@ -10,131 +7,129 @@ export interface DashboardStats {
   topLink: { label: string; clicks: number } | null;
 }
 
+function todayStr() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function subDays(date: Date, days: number) {
+  const d = new Date(date);
+  d.setDate(d.getDate() - days);
+  return d;
+}
+
+function formatDate(d: Date) {
+  return d.toISOString().slice(0, 10);
+}
+
 export async function getStats(): Promise<DashboardStats> {
-  if (!hasSupabase) return { today: 0, last7: 0, total: 0, topLink: null };
+  if (!hasKV) return { today: 0, last7: 0, total: 0, topLink: null };
 
-  const supabase = getSupabaseClient();
-  const now = new Date();
+  const kv = getKV();
+  const today = todayStr();
+  const sevenDates = Array.from({ length: 7 }, (_, i) =>
+    formatDate(subDays(new Date(), i))
+  );
 
-  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
-  const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
-
-  const [todayRes, weekRes, totalRes, topRes] = await Promise.all([
-    supabase.from("link_clicks").select("id", { count: "exact", head: true }).gte("clicked_at", todayStart),
-    supabase.from("link_clicks").select("id", { count: "exact", head: true }).gte("clicked_at", weekAgo),
-    supabase.from("link_clicks").select("id", { count: "exact", head: true }),
-    supabase.from("link_clicks").select("link_id").gte("clicked_at", weekAgo),
+  const [daily, totalStr, links] = await Promise.all([
+    kv.hgetall<Record<string, string>>("stats:daily"),
+    kv.get<string>("stats:total"),
+    kv.hgetall<Record<string, string>>("stats:links"),
   ]);
 
+  const total = Number(totalStr ?? 0);
+  const todayCount = Number(daily?.[today] ?? 0);
+  const last7 = sevenDates.reduce(
+    (acc, d) => acc + Number(daily?.[d] ?? 0),
+    0
+  );
+
   let topLink: { label: string; clicks: number } | null = null;
-  const topData = topRes.data as { link_id: string }[] | null;
-  if (topData && topData.length > 0) {
-    const counts: Record<string, number> = {};
-    topData.forEach((c) => {
-      counts[c.link_id] = (counts[c.link_id] ?? 0) + 1;
-    });
-    const topId = Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0];
-    if (topId) {
-      const { data: link } = await supabase.from("links").select("label").eq("id", topId).single();
-      topLink = { label: (link as { label: string | null })?.label ?? topId, clicks: counts[topId]! };
+  if (links) {
+    const entries = Object.entries(links).sort(
+      (a, b) => Number(b[1]) - Number(a[1])
+    );
+    const first = entries[0];
+    if (first) {
+      topLink = { label: first[0], clicks: Number(first[1]) };
     }
   }
 
-  return {
-    today: todayRes.count ?? 0,
-    last7: weekRes.count ?? 0,
-    total: totalRes.count ?? 0,
-    topLink,
-  };
+  return { today: todayCount, last7, total, topLink };
 }
 
-export async function getClicksOverTime(): Promise<{ date: string; total: number }[]> {
-  if (!hasSupabase) return [];
+export async function getClicksOverTime(): Promise<
+  { date: string; total: number }[]
+> {
+  if (!hasKV) return [];
 
-  const supabase = getSupabaseClient();
-  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+  const kv = getKV();
+  const daily = await kv.hgetall<Record<string, string>>("stats:daily");
+  if (!daily) return [];
 
-  const { data } = await supabase
-    .from("link_clicks")
-    .select("clicked_at")
-    .gte("clicked_at", thirtyDaysAgo)
-    .order("clicked_at", { ascending: true });
+  const thirtyDaysAgo = formatDate(subDays(new Date(), 30));
 
-  if (!data) return [];
-
-  const raw = data as { clicked_at: string }[];
-  const daily: Record<string, number> = {};
-  for (const c of raw) {
-    const day = c.clicked_at.slice(0, 10);
-    daily[day] = (daily[day] ?? 0) + 1;
-  }
-
-  return Object.entries(daily).map(([date, total]) => ({ date, total }));
+  return Object.entries(daily)
+    .filter(([date]) => date >= thirtyDaysAgo)
+    .map(([date, total]) => ({ date, total: Number(total) }))
+    .sort((a, b) => a.date.localeCompare(b.date));
 }
 
-export async function getClicksPerLink(): Promise<{ short_code: string; label: string; total: number }[]> {
-  if (!hasSupabase) return [];
+export async function getClicksPerLink(): Promise<
+  { short_code: string; label: string; total: number }[]
+> {
+  if (!hasKV) return [];
 
-  const supabase = getSupabaseClient();
-  const { data: clicks } = await supabase.from("link_clicks").select("link_id");
-  if (!clicks || clicks.length === 0) return [];
-
-  const { data: links } = await supabase.from("links").select("id, short_code, label");
+  const kv = getKV();
+  const links = await kv.hgetall<Record<string, string>>("stats:links");
   if (!links) return [];
 
-  const linkMap = new Map((links as DbLink[]).map((l) => [l.id, l]));
-
-  const counts: Record<string, number> = {};
-  for (const c of clicks as { link_id: string }[]) {
-    counts[c.link_id] = (counts[c.link_id] ?? 0) + 1;
-  }
-
-  return Object.entries(counts)
-    .map(([id, total]) => {
-      const link = linkMap.get(id);
-      return { short_code: link?.short_code ?? id, label: link?.label ?? id, total };
-    })
+  return Object.entries(links)
+    .map(([short_code, total]) => ({
+      short_code,
+      label: short_code,
+      total: Number(total),
+    }))
     .sort((a, b) => b.total - a.total);
 }
 
-export async function getReferrers(): Promise<{ referrer: string; total: number }[]> {
-  if (!hasSupabase) return [];
+export async function getReferrers(): Promise<
+  { referrer: string; total: number }[]
+> {
+  if (!hasKV) return [];
 
-  const supabase = getSupabaseClient();
-  const { data } = await supabase.from("link_clicks").select("referrer");
+  const kv = getKV();
+  const referrers = await kv.hgetall<Record<string, string>>(
+    "stats:referrers"
+  );
+  if (!referrers) return [];
 
-  if (!data) return [];
-
-  const counts: Record<string, number> = {};
-  for (const c of data as { referrer: string | null }[]) {
-    const ref = c.referrer || "direct";
-    counts[ref] = (counts[ref] ?? 0) + 1;
-  }
-
-  return Object.entries(counts)
-    .map(([referrer, total]) => ({ referrer, total }))
+  return Object.entries(referrers)
+    .map(([referrer, total]) => ({ referrer, total: Number(total) }))
     .sort((a, b) => b.total - a.total)
     .slice(0, 10);
 }
 
-export async function getRecentClicks(limit = 50): Promise<(DbClick & { label: string | null })[]> {
-  if (!hasSupabase) return [];
+export async function getRecentClicks(
+  limit = 50
+): Promise<
+  { label: string | null; clicked_at: string; referrer: string | null }[]
+> {
+  if (!hasKV) return [];
 
-  const supabase = getSupabaseClient();
-  const { data: clicks } = await supabase
-    .from("link_clicks")
-    .select("id, link_id, clicked_at, referrer, user_agent")
-    .order("clicked_at", { ascending: false })
-    .limit(limit);
+  const kv = getKV();
+  const raw = await kv.lrange<string>("recent", 0, limit - 1);
+  if (!raw) return [];
 
-  if (!clicks || clicks.length === 0) return [];
-
-  const linkIds = [...new Set((clicks as DbClick[]).map((c) => c.link_id))];
-  const { data: links } = await supabase.from("links").select("id, label").in("id", linkIds);
-  const linkMap = new Map(((links ?? []) as { id: string; label: string | null }[]).map((l) => [l.id, l.label]));
-
-  return (clicks as DbClick[]).map((c) => ({
-    ...c,
-    label: linkMap.get(c.link_id) ?? null,
-  }));
+  return raw.map((item) => {
+    try {
+      const parsed = JSON.parse(item);
+      return {
+        label: parsed.short_code ?? null,
+        clicked_at: parsed.clicked_at ?? "",
+        referrer: parsed.referrer ?? null,
+      };
+    } catch {
+      return { label: null, clicked_at: "", referrer: null };
+    }
+  });
 }

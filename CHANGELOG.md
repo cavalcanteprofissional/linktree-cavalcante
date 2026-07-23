@@ -9,6 +9,27 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [0.17.0] — 2026-07-23
+
+### Alterado
+
+- **Supabase → Vercel KV (Redis)** — analytics migrados de PostgreSQL para Redis edge
+- `lib/supabase.ts` → `lib/kv.ts`: client `@vercel/kv` com flag `hasKV`
+- `lib/dashboard-api.ts`: todas as queries substituídas por `KV.HGETALL`, `KV.HINCRBY`, `KV.LRANGE`, `KV.INCR`
+- `app/api/analytics/route.ts`: `HINCRBY` daily/link/referrer + `LPUSH` + `LTRIM` no lugar de insert SQL
+- `lib/instagram.ts`: fallback Supabase removido (agora API → config estático)
+- `lib/shortener.ts`: lookup Supabase removido (agora só config estático)
+- `.env.example`: vars `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` removidas; comentário sobre KV adicionado
+- `package.json`: `@supabase/supabase-js` removido, `@vercel/kv` adicionado
+
+### Removido
+
+- `lib/supabase.ts`
+- `supabase/` (schema.sql, rls.sql, seed.sql)
+- `scripts/analytics_pipeline.py`
+
+---
+
 ## [0.16.0] — 2026-07-23
 
 ### Adicionado
