@@ -7,12 +7,12 @@ Uma landing page pessoal estilo Linktree — moderna, mobile-first, dark mode e 
 - 📸 **Feed do Instagram dinâmico** (com fallback quando a API falha)
 - 📊 **Analytics de cliques** (opcional, sem depender de serviços externos)
 - 📈 **Dashboard visual** em `/dashboard` com gráficos Recharts, animações por seção com scroll (IntersectionObserver) (opcional, com senha ou aberto)
-- 💡 **Efeito CRT power-on** ao carregar a página (uma vez por sessão)
 - 🔘 **Bordas neon glow** em botões e avatar com intensificação no hover
 - 🔗 **Ícones de redes sociais** circulares com neon glow
 - 🖱️ **Glow interativo no background** — brilho azul que acompanha o movimento do mouse com suavização
 - 📍 **Card de localização** com mapa SVG blueprint (Terraink) + link Google Maps
 - 🌀 **Efeito tilt 3D + ripple** no container principal ao mover/clicar
+- 🌟 **Animações de entrada** — fade-in + slide-up progressivo em cada seção da página principal (100–500ms delay)
 
 ---
 
@@ -46,7 +46,6 @@ Uma landing page pessoal estilo Linktree — moderna, mobile-first, dark mode e 
 │   ├── SocialIcons.tsx     # LinkedIn, GitHub, Instagram, WhatsApp (círculos neon)
 │   ├── InstagramFeed.tsx   # Grid de posts do Instagram com stagger animation
 │   ├── LocationCard.tsx    # Endereço + mapa SVG blueprint
-│   ├── CrtOverlay.tsx      # Efeito CRT power-on (1x por sessão)
 │   ├── Footer.tsx          # Footer com assinatura
 │   ├── PoolEffect.tsx      # Glow background que segue o mouse
 │   ├── MouseInteraction.tsx # Tilt 3D + ripple no clique

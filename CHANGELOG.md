@@ -9,6 +9,27 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [0.16.0] — 2026-07-23
+
+### Adicionado
+
+- **Animações de entrada nos botões e cards** (`app/page.tsx`) — cada seção (ProfileHeader, ProjectLinks, InstagramFeed, LocationCard, SocialIcons) envolvida em `<AnimatedSection>` com delays progressivos 100–500ms, fade-in + slide-up (700ms ease-out)
+- **Favicon do portfolio** — `app/favicon.ico` substituído pelo mesmo do portfolio (`/portfolio/favicon.ico`)
+
+### Alterado
+
+- `app/page.tsx`: import de `AnimatedSection`; cada seção wrapper com `className="w-full"` para preservar alinhamento
+- `CHANGELOG.md`: seções reordenadas cronologicamente (versões mais recentes primeiro)
+
+### Removido
+
+- **CrtOverlay** (`components/CrtOverlay.tsx`) — efeito CRT power-on removido permanentemente
+- **Keyframes CRT** (`app/globals.css`) — `crt-flash`, `crt-scanlines`, `crt-wobble`, `crt-glitch`, `crt-flicker`, `crt-noise` e classes associadas deletadas
+- **Etapa 26** do TODO.md — Boot Experience Imersiva (cancelada)
+- **`/docs/`** removido do `.gitignore`
+
+---
+
 ## [0.15.0] — 2026-07-23
 
 ### Adicionado

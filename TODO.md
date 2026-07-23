@@ -257,19 +257,22 @@ Substituir os 5 botões fixos (LinkedIn, GitHub, WhatsApp, Portfólio, Lattes) p
 
 ---
 
-## ✅ Etapa 26: Boot Experience Imersiva (CRT + Boot Splash + Som)
+## ❌ Etapa 26: Boot Experience Imersiva (CRT + Boot Splash + Som) — Cancelada
 
-### 26.1 — CrtOverlay refeito
-- [x] `components/CrtOverlay.tsx`: boot splash escuro (`hsl(215,45%,8%)`) cobre a tela — igual ao `#boot-splash` do portfolio
-- [x] Conteúdo carrega atrás do overlay, revelado após fade-out (2.2s + 0.7s transition)
-- [x] Som de boot sintetizado via Web Audio API (hum 60Hz + flyback whine 12kHz + pop + noise burst)
-- [x] Glitch/flicker digitais nos primeiros 2s (glitch com hue-rotate, flicker com opacidade rápida)
-- [x] Sequência: dark screen → flash → scanlines + wobble → glitch/flicker → fade-out → conteúdo
+Removido por solicitação do usuário. CrtOverlay deletado, CSS CRT limpo do globals.css.
 
-### 26.2 — Keyframes
-- [x] `app/globals.css`: `@keyframes crt-glitch`, `crt-flicker`, `.animate-crt-glitch`, `.animate-crt-flicker`
+---
 
-### 26.3 — Build
+## ✅ Etapa 27: Animações de Entrada nos Botões e Cards (AnimatedSection)
+
+### 27.1 — Componente AnimatedSection
+- [x] `components/dashboard/AnimatedSection.tsx`: reutilizado sem modificações — fade-in + slide-up (translate-y-6 → 0) com `duration-700 ease-out`, timer-based com delay configurável
+
+### 27.2 — Animações na página principal
+- [x] `app/page.tsx`: cada seção (ProfileHeader, ProjectLinks, InstagramFeed, LocationCard, SocialIcons) envolvida em `<AnimatedSection>` com `delay` progressivo (100–500ms)
+- [x] `className="w-full"` passado a cada AnimatedSection para preservar largura e alinhamento dos componentes filhos
+
+### 27.3 — Build
 - [x] `npm run build` sem erros
 
 ---
