@@ -26,11 +26,11 @@ Uma landing page pessoal estilo Linktree — moderna, mobile-first, dark mode e 
 |---|---|
 | Framework | Next.js 16 (App Router) |
 | Estilização | Tailwind v4 + Dark Mode |
-| Analytics (opcional) | Vercel KV (Redis edge) |
+| Analytics (opcional) | Upstash Redis (via Vercel Marketplace) |
 | Deploy | Vercel (free tier) |
 | Testes | Playwright |
 
-> O analytics via Vercel KV é **opcional** — sem configurar, o site funciona normalmente com fallbacks estáticos.
+> O analytics via Upstash Redis é **opcional** — sem configurar, o site funciona normalmente com fallbacks estáticos.
 
 ---
 
@@ -64,7 +64,7 @@ Uma landing page pessoal estilo Linktree — moderna, mobile-first, dark mode e 
 │   ├── projects-mock.config.ts    # Projetos mockados (fallback)
 │   └── projects-translations.ts    # Traduções PT/EN/ES dos projetos
 ├── lib/                    # Lógica de negócio
-│   ├── kv.ts               # Cliente Vercel KV (Redis)
+│   ├── kv.ts               # Cliente Upstash Redis
 │   ├── instagram.ts        # Wrapper da API do Instagram
 │   ├── shortener.ts        # Resolução de short codes
 │   ├── icons.ts            # SVGs dos ícones (~30 paths)
@@ -149,11 +149,11 @@ Se for usar o feed real do Instagram:
 
 > Sem token, o feed usa posts mockados definidos em `config/instagram-mock.config.ts`.
 
-### 4. Vercel KV (analytics em Redis)
+### 4. Upstash Redis (analytics)
 
-O dashboard de analytics usa **Vercel KV** (Redis) em vez de banco externo.
-Na Vercel, vá em **Storage → Create Database → KV** e as env vars são injetadas automaticamente.
-Localmente, o dashboard funciona sem KV em modo fallback (dados zerados).
+O dashboard de analytics usa **Upstash Redis** via Vercel Marketplace.
+Na Vercel, vá em **Marketplace → Upstash Redis** e crie um banco (as env vars são injetadas automaticamente).
+Localmente, o dashboard funciona sem Redis em modo fallback (dados zerados).
 
 ### 5. Dashboard Analytics (opcional)
 
@@ -203,7 +203,7 @@ Os screenshots são salvos em `.validation/`.
 1. Faça o build local: `npm run build`
 2. Crie um repositório no GitHub e faça push
 3. Acesse [vercel.com](https://vercel.com) e importe o repositório
-4. Vá em **Storage → Create Database → KV** para criar o Redis (env vars injetadas automaticamente)
+4. Vá em **Marketplace → Upstash Redis** e crie um banco (env vars injetadas automaticamente)
 5. Configure as demais variáveis de ambiente (Production + Preview) se necessário
 6. Pronto! Seu LinkTree está no ar 🎉
 

@@ -305,11 +305,28 @@ Removido por solicitação do usuário. CrtOverlay deletado, CSS CRT limpo do gl
 
 ---
 
-## 🔄 Pendente: Configurar Vercel KV
+## ✅ Etapa 29: Migração @vercel/kv → @upstash/redis
+
+### 29.1 — Dependências
+- [ ] `npm uninstall @vercel/kv && npm install @upstash/redis`
+
+### 29.2 — Cliente
+- [ ] `lib/kv.ts`: import `Redis` do `@upstash/redis`, env vars `UPSTASH_REDIS_REST_URL`/`UPSTASH_REDIS_REST_TOKEN`
+
+### 29.3 — Env vars
+- [ ] `.env.example`: comentários atualizados de `KV_*` para `UPSTASH_REDIS_REST_*`
+- [ ] `.env.local`: comentários atualizados
+
+### 29.4 — Build
+- [ ] `npm run build` sem erros
+
+---
+
+## 🔄 Pendente: Configurar Upstash Redis na Vercel
 
 Após o deploy:
-1. Vercel Dashboard → **Storage** → **Create Database** → **KV**
-2. Escolher região (ex: `gru1` São Paulo)
-3. As env vars são injetadas automaticamente pela Vercel
+1. Vercel Dashboard → **Marketplace** → **Upstash Redis**
+2. Criar banco Redis gratuito
+3. As env vars (`UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`) são injetadas automaticamente
 4. Fazer redeploy do projeto
-5. Opcional: configurar `DASHBOARD_PASSWORD`, `INSTAGRAM_ACCESS_TOKEN`, `INSTAGRAM_BUSINESS_ACCOUNT_ID` nas Environment Variables da Vercel
+5. Opcional: configurar `DASHBOARD_PASSWORD`, `INSTAGRAM_ACCESS_TOKEN`, `INSTAGRAM_BUSINESS_ACCOUNT_ID`

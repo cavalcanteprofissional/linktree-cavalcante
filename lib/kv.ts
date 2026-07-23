@@ -1,16 +1,13 @@
-import { createClient } from "@vercel/kv";
+import { Redis } from "@upstash/redis";
 
-const kvUrl = process.env.KV_URL;
-const kvToken = process.env.KV_REST_API_TOKEN;
+const url = process.env.UPSTASH_REDIS_REST_URL;
+const token = process.env.UPSTASH_REDIS_REST_TOKEN;
 
-export const hasKV = !!kvUrl && !!kvToken;
+export const hasKV = !!url && !!token;
 
 export function getKV() {
   if (!hasKV) {
-    throw new Error("Vercel KV not configured");
+    throw new Error("Upstash Redis not configured");
   }
-  return createClient({
-    url: kvUrl!,
-    token: kvToken!,
-  });
+  return new Redis({ url: url!, token: token! });
 }

@@ -9,6 +9,16 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [0.18.0] — 2026-07-23
+
+### Alterado
+
+- **@vercel/kv → @upstash/redis** — pacote deprecated substituído pelo recomendado
+- `lib/kv.ts`: `createClient` → `new Redis({ url, token })`, env vars `KV_*` → `UPSTASH_REDIS_REST_*`
+- `.env.example` e `.env.local`: comentários atualizados para `UPSTASH_REDIS_REST_URL`/`UPSTASH_REDIS_REST_TOKEN`
+
+---
+
 ## [0.17.0] — 2026-07-23
 
 ### Alterado
