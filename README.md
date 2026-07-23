@@ -1,7 +1,7 @@
 # 🌐 LinkTree Cavalcante
 
 <p align="center">
-  <img src="/images/thumbnail.png" alt="LinkTree Cavalcante preview" width="800" />
+  <img src="public/images/thumbnail.png" alt="LinkTree Cavalcante preview" width="800" />
 </p>
 
 Uma landing page pessoal estilo Linktree — moderna, mobile-first, dark mode e com superpoderes:
